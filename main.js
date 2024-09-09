@@ -1,6 +1,5 @@
 const gameParameters = {
-  maxQuestionNumber: 5,
-  initialRemainingTime: 60,
+  initialCoin: 60,
 };
 
 const gameStatus = {
@@ -8,23 +7,7 @@ const gameStatus = {
   isGameStart: false,
   isGameClear: false,
   isGameOver: false,
-  startTime: 0,
-  remainingTime: 0,
-  questionNumber: 0,
-  character: "漢",
-  dummyCharacter: "漢",
-  completedQuestions: [],
-  reset: () => {
-    gameStatus.isGameStart = false;
-    gameStatus.isGameClear = false;
-    gameStatus.isGameOver = false;
-    gameStatus.startTime = 0;
-    gameStatus.remainingTime = 0;
-    gameStatus.questionNumber = 0;
-    gameStatus.character = "漢";
-    gameStatus.dummyCharacter = "漢";
-    gameStatus.completedQuestions = [];
-  },
+  coin: 0,
 };
 
 const mainContainer = {
@@ -37,6 +20,12 @@ const screenContainer = {
   element: null,
   width: mainContainer.width - 10,
   height: mainContainer.height - 10,
+};
+
+const controllerContainer = {
+  element: null,
+  width: mainContainer.width,
+  height: mainContainer.height * 0.2,
 };
 
 const messageWrapContainer = {
@@ -56,57 +45,6 @@ const statusMessageContainer = {
   width: messageWrapContainer.width / 2,
   height: messageWrapContainer.height * 0.8,
 };
-
-const characterData = [
-  {
-    character: "肉",
-    dummyCharacter: "内",
-  },
-  {
-    character: "明",
-    dummyCharacter: "朋",
-  },
-  {
-    character: "笛",
-    dummyCharacter: "苗",
-  },
-  {
-    character: "睛",
-    dummyCharacter: "晴",
-  },
-  {
-    character: "域",
-    dummyCharacter: "城",
-  },
-  {
-    character: "堀",
-    dummyCharacter: "掘",
-  },
-  {
-    character: "諭",
-    dummyCharacter: "輪",
-  },
-  {
-    character: "裁",
-    dummyCharacter: "栽",
-  },
-  {
-    character: "徴",
-    dummyCharacter: "微",
-  },
-  {
-    character: "洒",
-    dummyCharacter: "酒",
-  },
-  {
-    character: "因",
-    dummyCharacter: "困",
-  },
-  {
-    character: "荼",
-    dummyCharacter: "茶",
-  },
-];
 
 const cellRow = 8;
 const cellCol = 11;
@@ -199,26 +137,33 @@ const tick = () => {
   requestAnimationFrame(tick);
 };
 
-const initQuestion = () => {
-  if (gameStatus.questionNumber >= gameParameters.maxQuestionNumber) {
-    gameStatus.isGameClear = true;
-    return;
-  }
-  gameStatus.questionNumber++;
-  gameStatus.completedQuestions.push(gameStatus.character);
-
-  const availableCharacters = characterData.filter(
-    (char) => !gameStatus.completedQuestions.includes(char.character)
-  );
-  const selectedCharacter =
-    availableCharacters[Math.floor(Math.random() * availableCharacters.length)];
-
-  gameStatus.character = selectedCharacter.character;
-  gameStatus.dummyCharacter = selectedCharacter.dummyCharacter;
-
-  cells.forEach((cell) => cell.init());
-  cells[[Math.floor(Math.random() * cells.length)]].element.textContent =
-    gameStatus.character;
+const controller = {
+  element: null,
+  width: mainContainer.width * 0.9,
+  height: mainContainer.height * 0.15,
+  pressedButtonNum: 0,
+  buttonList: ["Stop", "▶"],
+  status: {
+    leftButtonPressed: false,
+    rightButtonPressed: false,
+  },
+  changeStatus: (buttonText, isPressed) => {
+    switch (buttonText) {
+      case "◀":
+        controllerContainer.status.leftButtonPressed = isPressed;
+        break;
+      case "▶":
+        controllerContainer.status.rightButtonPressed = isPressed;
+        break;
+      default:
+        // empty
+        break;
+    }
+  },
+  resetStatus: () => {
+    controllerContainer.status.leftButtonPressed = false;
+    controllerContainer.status.rightButtonPressed = false;
+  },
 };
 
 const cells = [...Array(cellRow * cellCol)].fill().map((_, index) => ({
@@ -328,88 +273,7 @@ const scene = [
       gameStatus.currentScene = scene.find((e) => e.name === "ready");
     },
   },
-  {
-    name: "gameClear",
-    update: () => {
-      showGameClearMessage();
-      gameStatus.isGameStart = false;
-      gameStatus.currentScene = scene.find((e) => e.name === "ready");
-    },
-  },
 ];
-
-const showTitleMessage = () => {
-  let wrapElement = document.createElement("div");
-  wrapElement.style.position = "relative";
-  wrapElement.style.zIndex = "1";
-  wrapElement.style.width = screenContainer.width + "px";
-  wrapElement.style.height = screenContainer.height * 0.4 + "px";
-  wrapElement.style.display = "flex";
-  wrapElement.style.flexDirection = "column";
-  wrapElement.style.alignItems = "center";
-  wrapElement.style.justifyContent = "center";
-
-  let messageElement = document.createElement("div");
-  messageElement.style.position = "relative";
-  messageElement.style.zIndex = "1";
-  messageElement.style.width = screenContainer.width * 0.9 + "px";
-  messageElement.style.height = screenContainer.height * 0.15 + "px";
-  messageElement.style.display = "flex";
-  messageElement.style.alignItems = "center";
-  messageElement.style.justifyContent = "center";
-  messageElement.style.backgroundColor = "#f5deb3";
-  messageElement.style.borderRadius = "15px";
-  messageElement.style.fontSize = "25px";
-  messageElement.textContent = "漢字間違い探しゲーム";
-  wrapElement.appendChild(messageElement);
-
-  let startButtonElement = document.createElement("div");
-  startButtonElement.style.position = "relative";
-  startButtonElement.style.zIndex = "1";
-  startButtonElement.style.width = screenContainer.width * 0.7 + "px";
-  startButtonElement.style.height = screenContainer.height * 0.1 + "px";
-  startButtonElement.style.marginTop = "10px";
-  startButtonElement.style.display = "flex";
-  startButtonElement.style.alignItems = "center";
-  startButtonElement.style.justifyContent = "center";
-  startButtonElement.style.backgroundColor = "#deb887";
-  startButtonElement.style.color = "black";
-  startButtonElement.style.fontSize = "28px";
-  startButtonElement.style.border = "3px solid #b99679";
-  startButtonElement.style.borderRadius = "50px";
-  startButtonElement.style.cursor = "pointer";
-  startButtonElement.textContent = "始める";
-  const handleCellTouchEvent = (e) => {
-    e.preventDefault();
-    gameStatus.isGameStart = true;
-    wrapElement.remove();
-  };
-
-  if (window.ontouchstart === null) {
-    startButtonElement.ontouchstart = handleCellTouchEvent;
-  } else {
-    startButtonElement.onpointerdown = handleCellTouchEvent;
-  }
-  wrapElement.appendChild(startButtonElement);
-  screenContainer.element.appendChild(wrapElement);
-};
-
-const showGameClearMessage = () => {
-  let messageElement = document.createElement("div");
-  messageElement.style.position = "relative";
-  messageElement.style.zIndex = "1";
-  messageElement.style.width = screenContainer.width * 0.85 + "px";
-  messageElement.style.height = screenContainer.height * 0.15 + "px";
-  messageElement.style.display = "flex";
-  messageElement.style.alignItems = "center";
-  messageElement.style.justifyContent = "center";
-  messageElement.style.backgroundColor = "#f5deb3";
-  messageElement.style.borderRadius = "15px";
-  messageElement.style.color = "blue";
-  messageElement.style.fontSize = "32px";
-  messageElement.textContent = "Game Clear !!";
-  screenContainer.element.appendChild(messageElement);
-};
 
 const showGameOverMessage = () => {
   let wrapElement = document.createElement("div");
@@ -467,35 +331,4 @@ const showGameOverMessage = () => {
   }
   wrapElement.appendChild(retryButtonElement);
   screenContainer.element.appendChild(wrapElement);
-};
-
-const showRetryMessage = () => {
-  let messageElement = document.createElement("div");
-  messageElement.style.position = "relative";
-  messageElement.style.zIndex = "1";
-  messageElement.style.width = screenContainer.width * 0.8 + "px";
-  messageElement.style.height = screenContainer.height * 0.1 + "px";
-  messageElement.style.display = "flex";
-  messageElement.style.alignItems = "center";
-  messageElement.style.justifyContent = "center";
-  messageElement.style.backgroundColor = "#deb887";
-  messageElement.style.color = "black";
-  messageElement.style.fontSize = "28px";
-  messageElement.style.border = "3px solid #b99679";
-  messageElement.style.borderRadius = "50px";
-  messageElement.style.cursor = "pointer";
-  messageElement.textContent = "もう一度遊ぶ";
-  const handleCellTouchEvent = (e) => {
-    e.preventDefault();
-    gameStatus.isGameStart = true;
-    gameStatus.reset();
-    messageElement.remove();
-  };
-
-  if (window.ontouchstart === null) {
-    messageElement.ontouchstart = handleCellTouchEvent;
-  } else {
-    messageElement.onpointerdown = handleCellTouchEvent;
-  }
-  screenContainer.element.appendChild(messageElement);
 };
