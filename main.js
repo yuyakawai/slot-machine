@@ -7,7 +7,7 @@ const gameStatus = {
   isGameStart: false,
   isGameClear: false,
   isGameOver: false,
-  coin: 0,
+  coin: gameParameters.initialCoin,
 };
 
 const mainContainer = {
@@ -74,16 +74,6 @@ const init = () => {
   mainContainer.element.style.userSelect = "none";
   mainContainer.element.style.webkitUserSelect = "none";
 
-  screenContainer.element = document.createElement("div");
-  screenContainer.element.style.position = "relative";
-  screenContainer.element.style.width = screenContainer.width + "px";
-  screenContainer.element.style.height = screenContainer.height + "px";
-  screenContainer.element.style.margin = "3px";
-  screenContainer.element.style.display = "flex";
-  screenContainer.element.style.alignItems = "center";
-  screenContainer.element.style.justifyContent = "center";
-  mainContainer.element.appendChild(screenContainer.element);
-
   messageWrapContainer.element = document.createElement("div");
   messageWrapContainer.element.style.position = "relative";
   messageWrapContainer.element.style.width = messageWrapContainer.width + "px";
@@ -93,22 +83,6 @@ const init = () => {
   messageWrapContainer.element.style.alignItems = "center";
   messageWrapContainer.element.style.justifyContent = "center";
   mainContainer.element.appendChild(messageWrapContainer.element);
-
-  timeMessageContainer.element = document.createElement("div");
-  timeMessageContainer.element.style.position = "relative";
-  timeMessageContainer.element.style.display = "flex";
-  timeMessageContainer.element.style.alignItems = "center";
-  timeMessageContainer.element.style.justifyContent = "center";
-  timeMessageContainer.element.style.backgroundColor = "#deb887";
-  timeMessageContainer.element.style.width = timeMessageContainer.width + "px";
-  timeMessageContainer.element.style.height =
-    timeMessageContainer.height + "px";
-  timeMessageContainer.element.style.margin = "3px";
-  timeMessageContainer.element.style.borderRadius = "50px";
-  timeMessageContainer.element.style.fontSize = "20px";
-  timeMessageContainer.element.textContent =
-    "残り時間 " + gameParameters.initialRemainingTime.toFixed(2);
-  messageWrapContainer.element.appendChild(timeMessageContainer.element);
 
   statusMessageContainer.element = document.createElement("div");
   statusMessageContainer.element.style.position = "relative";
@@ -121,13 +95,36 @@ const init = () => {
   statusMessageContainer.element.style.height =
     statusMessageContainer.height + "px";
   statusMessageContainer.element.style.margin = "3px";
-  statusMessageContainer.element.style.borderRadius = "50px";
+  statusMessageContainer.element.style.borderRadius = "10px";
   statusMessageContainer.element.style.fontSize = "20px";
-  statusMessageContainer.element.textContent =
-    "問 " + gameStatus.questionNumber + "/" + gameParameters.maxQuestionNumber;
+  statusMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
   messageWrapContainer.element.appendChild(statusMessageContainer.element);
 
-  cells.forEach((cell) => cell.init());
+  screenContainer.element = document.createElement("div");
+  screenContainer.element.style.position = "relative";
+  screenContainer.element.style.backgroundColor = "red";
+  screenContainer.element.style.width = screenContainer.width + "px";
+  screenContainer.element.style.height = screenContainer.height + "px";
+  screenContainer.element.style.margin = "3px";
+  screenContainer.element.style.display = "flex";
+  screenContainer.element.style.alignItems = "center";
+  screenContainer.element.style.justifyContent = "center";
+  mainContainer.element.appendChild(screenContainer.element);
+
+  controllerContainer.element = document.createElement("div");
+  controllerContainer.element.style.position = "relative";
+  controllerContainer.element.style.width = controllerContainer.width + "px";
+  controllerContainer.element.style.height = controllerContainer.height + "px";
+  controllerContainer.element.style.margin = "0px";
+  controllerContainer.element.style.fontSize = "32px";
+  controllerContainer.element.style.boxSizing = "border-box";
+  controllerContainer.element.style.display = "flex";
+  controllerContainer.element.style.alignItems = "center";
+  controllerContainer.element.style.justifyContent = "center";
+  mainContainer.element.appendChild(controllerContainer.element);
+
+  controller.init();
+
   gameStatus.currentScene = scene.find((e) => e.name === "init");
   tick();
 };
@@ -138,35 +135,73 @@ const tick = () => {
 };
 
 const controller = {
-  element: null,
-  width: mainContainer.width * 0.9,
-  height: mainContainer.height * 0.15,
   pressedButtonNum: 0,
-  buttonList: ["Stop", "▶"],
-  status: {
-    leftButtonPressed: false,
-    rightButtonPressed: false,
+  buttons: [
+    { name: "left", element: null, isPressed: false },
+    { name: "center", element: null, isPressed: false },
+    { name: "right", element: null, isPressed: false },
+  ],
+
+  init: () => {
+    controller.buttons.forEach((button) => {
+      let buttonElement = document.createElement("div");
+      buttonElement.style.position = "relative";
+      buttonElement.style.width = controllerContainer.width * 0.35 + "px";
+      buttonElement.style.height = controllerContainer.height * 0.5 + "px";
+      buttonElement.style.margin = "15px";
+      buttonElement.style.fontSize = controllerContainer.width * 0.08 + "px";
+      buttonElement.style.backgroundColor = "orange";
+      buttonElement.style.borderBottom = "5px solid #b84c00";
+      buttonElement.style.borderRadius = "7px";
+      buttonElement.style.boxSizing = "border-box";
+      buttonElement.style.cursor = "pointer";
+      buttonElement.style.display = "flex";
+      buttonElement.style.alignItems = "center";
+      buttonElement.style.justifyContent = "center";
+      buttonElement.textContent = button.name;
+      button.element = buttonElement;
+      controllerContainer.element.appendChild(buttonElement);
+
+      const handleButtonDown = (e) => {
+        e.preventDefault();
+        controller.changeStatus(e.target.textContent, !button.isPressed);
+      };
+
+      const handleButtonUp = (e) => {
+        e.preventDefault();
+      };
+
+      if (window.ontouchstart === null) {
+        buttonElement.ontouchstart = handleButtonDown;
+        buttonElement.ontouchend = handleButtonUp;
+      } else {
+        buttonElement.onpointerdown = handleButtonDown;
+        buttonElement.onpointerup = handleButtonUp;
+      }
+    });
+
+    controller.update();
   },
+
   changeStatus: (buttonText, isPressed) => {
-    switch (buttonText) {
-      case "◀":
-        controllerContainer.status.leftButtonPressed = isPressed;
-        break;
-      case "▶":
-        controllerContainer.status.rightButtonPressed = isPressed;
-        break;
-      default:
-        // empty
-        break;
-    }
+    controller.buttons.find((e) => e.name === buttonText).isPressed = isPressed;
+    controller.update();
   },
-  resetStatus: () => {
-    controllerContainer.status.leftButtonPressed = false;
-    controllerContainer.status.rightButtonPressed = false;
+
+  update: () => {
+    controller.buttons.forEach((button) => {
+      if (button.isPressed) {
+        button.element.style.borderBottom = "1px solid #b84c00";
+        button.element.style.backgroundColor = "#b84c00";
+      } else {
+        button.element.style.borderBottom = "5px solid #b84c00";
+        button.element.style.backgroundColor = "orange";
+      }
+    });
   },
 };
 
-const cells = [...Array(cellRow * cellCol)].fill().map((_, index) => ({
+const reels = [...Array(cellRow * cellCol)].fill().map((_, index) => ({
   element: null,
   isEmpty: false,
   x: 0,
@@ -218,7 +253,6 @@ const scene = [
   {
     name: "init",
     update: () => {
-      showTitleMessage();
       gameStatus.currentScene = scene.find((e) => e.name === "ready");
     },
   },
