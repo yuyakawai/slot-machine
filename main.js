@@ -201,7 +201,7 @@ const controller = {
   },
 };
 
-const reels = [...Array(cellRow * cellCol)].fill().map((_, index) => ({
+const reels = [...Array(3)].fill().map((_, index) => ({
   element: null,
   isEmpty: false,
   x: 0,
