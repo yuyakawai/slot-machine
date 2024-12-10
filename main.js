@@ -119,6 +119,7 @@ const init = () => {
   controllerContainer.element.style.fontSize = "32px";
   controllerContainer.element.style.boxSizing = "border-box";
   controllerContainer.element.style.display = "flex";
+  controllerContainer.element.style.flexWrap = "wrap";
   controllerContainer.element.style.alignItems = "center";
   controllerContainer.element.style.justifyContent = "center";
   mainContainer.element.appendChild(controllerContainer.element);
@@ -140,15 +141,16 @@ const controller = {
     { name: "left", element: null, isPressed: false },
     { name: "center", element: null, isPressed: false },
     { name: "right", element: null, isPressed: false },
+    { name: "start", element: null, isPressed: false },
   ],
 
   init: () => {
     controller.buttons.forEach((button) => {
       let buttonElement = document.createElement("div");
       buttonElement.style.position = "relative";
-      buttonElement.style.width = controllerContainer.width * 0.35 + "px";
-      buttonElement.style.height = controllerContainer.height * 0.5 + "px";
-      buttonElement.style.margin = "15px";
+      buttonElement.style.width = controllerContainer.width * 0.3 + "px";
+      buttonElement.style.height = controllerContainer.height * 0.4 + "px";
+      buttonElement.style.margin = "5px";
       buttonElement.style.fontSize = controllerContainer.width * 0.08 + "px";
       buttonElement.style.backgroundColor = "orange";
       buttonElement.style.borderBottom = "5px solid #b84c00";
