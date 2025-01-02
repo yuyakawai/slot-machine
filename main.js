@@ -46,10 +46,6 @@ const statusMessageContainer = {
   height: messageWrapContainer.height * 0.8,
 };
 
-const cellRow = 8;
-const cellCol = 11;
-const cellSize = screenContainer.width / cellRow;
-
 window.onload = () => {
   init();
 };
@@ -125,6 +121,7 @@ const init = () => {
   mainContainer.element.appendChild(controllerContainer.element);
 
   controller.init();
+  reels.forEach((reel) => reel.init());
 
   gameStatus.currentScene = scene.find((e) => e.name === "init");
   tick();
@@ -205,49 +202,27 @@ const controller = {
 
 const reels = [...Array(3)].fill().map((_, index) => ({
   element: null,
-  isEmpty: false,
   x: 0,
   y: 0,
+  width: screenContainer.width / 3,
+  height: screenContainer.height,
   init: () => {
-    cells[index].x = index % cellRow;
-    cells[index].y = Math.trunc(index / cellRow);
-    cells[index].element = document.createElement("div");
-    cells[index].element.style.position = "absolute";
-    cells[index].element.style.width = cellSize + "px";
-    cells[index].element.style.height = cellSize + "px";
-    cells[index].element.style.left = cells[index].x * cellSize + "px";
-    cells[index].element.style.top = cells[index].y * cellSize + "px";
-    cells[index].element.style.border = "3px ridge #cb986f";
-    cells[index].element.style.backgroundColor = "#ccb28e";
-    cells[index].element.style.boxSizing = "border-box";
-    cells[index].element.style.fontSize = cellSize * 0.6 + "px";
-    cells[index].element.style.display = "flex";
-    cells[index].element.style.alignItems = "center";
-    cells[index].element.style.justifyContent = "center";
-    cells[index].element.style.cursor = "pointer";
-    cells[index].element.textContent = gameStatus.dummyCharacter;
-    screenContainer.element.appendChild(cells[index].element);
-
-    const handleCellTouchEvent = (e) => {
-      e.preventDefault();
-      if (
-        gameStatus.isGameStart === false ||
-        gameStatus.isGameOver ||
-        gameStatus.isGameClear
-      ) {
-        return;
-      }
-
-      if (e.target.textContent === gameStatus.character) {
-        initQuestion();
-      }
-    };
-
-    if (window.ontouchstart === null) {
-      cells[index].element.ontouchstart = handleCellTouchEvent;
-    } else {
-      cells[index].element.onpointerdown = handleCellTouchEvent;
-    }
+    reels[index].x = index * reels[index].width;
+    reels[index].y = 0;
+    reels[index].element = document.createElement("div");
+    reels[index].element.style.position = "absolute";
+    reels[index].element.style.width = width + "px";
+    reels[index].element.style.height = height + "px";
+    reels[index].element.style.left = reels[index].x + "px";
+    reels[index].element.style.top = reels[index].y + "px";
+    reels[index].element.style.border = "3px ridge #cb986f";
+    reels[index].element.style.backgroundColor = "#ccb28e";
+    reels[index].element.style.boxSizing = "border-box";
+    reels[index].element.style.display = "flex";
+    reels[index].element.style.alignItems = "center";
+    reels[index].element.style.justifyContent = "center";
+    reels[index].element.style.cursor = "pointer";
+    screenContainer.element.appendChild(reels[index].element);
   },
 }));
 
