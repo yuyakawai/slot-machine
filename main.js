@@ -280,7 +280,7 @@ const reels = [...Array(3)].fill().map((_, index) => ({
   init: () => {
     reels[index].x = index * reels[index].width;
     reels[index].y = 0;
-    reels[index].element = document.createElement("div");
+    reels[index].element = document.createElement("canvas");
     reels[index].element.style.position = "absolute";
     reels[index].element.style.width = reels[index].width + "px";
     reels[index].element.style.height = reels[index].height + "px";
@@ -292,6 +292,7 @@ const reels = [...Array(3)].fill().map((_, index) => ({
     reels[index].element.style.display = "flex";
     reels[index].element.style.alignItems = "center";
     reels[index].element.style.justifyContent = "center";
+
     screenContainer.element.appendChild(reels[index].element);
   },
 }));
