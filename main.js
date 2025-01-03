@@ -1,3 +1,5 @@
+import { images } from "./images.js";
+
 const gameParameters = {
   initialCoin: 60,
 };
@@ -18,8 +20,8 @@ const mainContainer = {
 
 const screenContainer = {
   element: null,
-  width: mainContainer.width - 10,
-  height: mainContainer.height - 10,
+  width: mainContainer.width * 0.9,
+  height: mainContainer.height * 0.6,
 };
 
 const controllerContainer = {
@@ -44,6 +46,11 @@ const statusMessageContainer = {
   element: null,
   width: messageWrapContainer.width / 2,
   height: messageWrapContainer.height * 0.8,
+};
+
+const loaderContainer = {
+  progressBarElement: null,
+  messageElement: null,
 };
 
 window.onload = () => {
@@ -120,16 +127,80 @@ const init = () => {
   controllerContainer.element.style.justifyContent = "center";
   mainContainer.element.appendChild(controllerContainer.element);
 
+  loaderContainer.progressBarElement = document.createElement("div");
+  loaderContainer.progressBarElement.classList.add("progress-bar");
+  loaderContainer.progressBarElement.style.position = "absolute";
+  loaderContainer.messageElement = document.createElement("div");
+  loaderContainer.messageElement.classList.add("message");
+  loaderContainer.messageElement.textContent = "読み込み中...";
+  mainContainer.element.appendChild(loaderContainer.progressBarElement);
+  mainContainer.element.appendChild(loaderContainer.messageElement);
+
   controller.init();
   reels.forEach((reel) => reel.init());
+  loadImages();
 
-  gameStatus.currentScene = scene.find((e) => e.name === "init");
+  gameStatus.currentScene = scene.find((e) => e.name === "initImages");
   tick();
 };
 
 const tick = () => {
   gameStatus.currentScene.update();
   requestAnimationFrame(tick);
+};
+
+const scene = [
+  {
+    name: "initImages",
+    update: () => {
+      updateImageLoading();
+    },
+  },
+  {
+    name: "initGame",
+    update: () => {
+      gameStatus.currentScene = scene.find((e) => e.name === "ready");
+    },
+  },
+  {
+    name: "ready",
+    update: () => {
+      // empty
+    },
+  },
+  {
+    name: "gamePlay",
+    update: () => {
+      // empty
+    },
+  },
+  {
+    name: "gameOver",
+    update: () => {
+      showGameOverMessage();
+      gameStatus.isGameStart = false;
+      gameStatus.currentScene = scene.find((e) => e.name === "ready");
+    },
+  },
+];
+
+const loadImages = () => {
+  images.forEach((image) => {
+    image.element = new Image();
+    image.element.src = image.path;
+    image.element.onload = () => {
+      image.isLoaded = true;
+    };
+  });
+};
+
+const updateImageLoading = () => {
+  if (images.some((image) => image.isLoaded === false)) {
+    return;
+  }
+  loaderContainer.progressBarElement.style.display = "none";
+  loaderContainer.messageElement.style.display = "none";
+  gameStatus.currentScene = scene.find((e) => e.name === "initGame");
 };
 
 const controller = {
@@ -211,80 +282,19 @@ const reels = [...Array(3)].fill().map((_, index) => ({
     reels[index].y = 0;
     reels[index].element = document.createElement("div");
     reels[index].element.style.position = "absolute";
-    reels[index].element.style.width = width + "px";
-    reels[index].element.style.height = height + "px";
+    reels[index].element.style.width = reels[index].width + "px";
+    reels[index].element.style.height = reels[index].height + "px";
     reels[index].element.style.left = reels[index].x + "px";
     reels[index].element.style.top = reels[index].y + "px";
-    reels[index].element.style.border = "3px ridge #cb986f";
-    reels[index].element.style.backgroundColor = "#ccb28e";
+    reels[index].element.style.border = "6px ridge black";
+    reels[index].element.style.backgroundColor = "white";
     reels[index].element.style.boxSizing = "border-box";
     reels[index].element.style.display = "flex";
     reels[index].element.style.alignItems = "center";
     reels[index].element.style.justifyContent = "center";
-    reels[index].element.style.cursor = "pointer";
     screenContainer.element.appendChild(reels[index].element);
   },
 }));
-
-const scene = [
-  {
-    name: "init",
-    update: () => {
-      gameStatus.currentScene = scene.find((e) => e.name === "ready");
-    },
-  },
-  {
-    name: "ready",
-    update: () => {
-      if (gameStatus.isGameStart) {
-        initQuestion();
-        gameStatus.startTime = performance.now();
-        gameStatus.currentScene = scene.find((e) => e.name === "gamePlay");
-      }
-    },
-  },
-  {
-    name: "gamePlay",
-    update: () => {
-      if (gameStatus.isGameClear) {
-        gameStatus.currentScene = scene.find((e) => e.name === "gameClear");
-        return;
-      }
-
-      if (gameStatus.isGameOver) {
-        gameStatus.currentScene = scene.find((e) => e.name === "gameOver");
-        return;
-      }
-
-      gameStatus.remainingTime = Math.max(
-        0,
-        gameParameters.initialRemainingTime -
-          (performance.now() - gameStatus.startTime) / 1000
-      );
-
-      timeMessageContainer.element.textContent =
-        "残り時間 " + gameStatus.remainingTime.toFixed(2);
-
-      statusMessageContainer.element.textContent =
-        "問 " +
-        gameStatus.questionNumber +
-        "/" +
-        gameParameters.maxQuestionNumber;
-
-      if (gameStatus.remainingTime <= 0) {
-        gameStatus.isGameOver = true;
-      }
-    },
-  },
-  {
-    name: "gameOver",
-    update: () => {
-      showGameOverMessage();
-      gameStatus.isGameStart = false;
-      gameStatus.currentScene = scene.find((e) => e.name === "ready");
-    },
-  },
-];
 
 const showGameOverMessage = () => {
   let wrapElement = document.createElement("div");
