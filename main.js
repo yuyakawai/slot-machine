@@ -36,12 +36,6 @@ const messageWrapContainer = {
   height: mainContainer.height * 0.1,
 };
 
-const timeMessageContainer = {
-  element: null,
-  width: messageWrapContainer.width / 2,
-  height: messageWrapContainer.height * 0.8,
-};
-
 const statusMessageContainer = {
   element: null,
   width: messageWrapContainer.width / 2,
@@ -59,6 +53,16 @@ const canvas = {
   width: screenContainer.width,
   height: screenContainer.height,
 };
+
+const reels = Array(3).fill({
+  x: 0,
+  y: 0,
+  width: 96,
+  height: 288,
+  imageY: 0,
+  speed: 1,
+  isSpinning: false,
+});
 
 window.onload = () => {
   init();
@@ -153,7 +157,6 @@ const init = () => {
   mainContainer.element.appendChild(loaderContainer.messageElement);
 
   controller.init();
-  // reels.forEach((reel) => reel.init());
   loadImages();
 
   gameStatus.currentScene = scene.find((e) => e.name === "initImages");
@@ -215,17 +218,23 @@ const updateImageLoading = () => {
 
 const ready = () => {
   gameStatus.isGameStart = true;
-  canvas.context.drawImage(
-    images.find((image) => image.name === "image_1").element,
-    0,
-    96,
-    96,
-    288,
-    0,
-    0,
-    96,
-    288
-  );
+
+  reels.forEach((reel, index) => {
+    reel.x = index * 96;
+    reel.y = 0;
+    reel.imageY += reel.speed;
+    canvas.context.drawImage(
+      images.find((image) => image.name === "image_1").element,
+      0,
+      reel.imageY,
+      96,
+      288,
+      reel.x,
+      reel.y,
+      96,
+      288
+    );
+  });
 };
 
 const controller = {
@@ -295,32 +304,6 @@ const controller = {
     });
   },
 };
-
-const reels = [...Array(3)].fill().map((_, index) => ({
-  element: null,
-  x: 0,
-  y: 0,
-  width: screenContainer.width / 3,
-  height: screenContainer.height,
-  init: () => {
-    reels[index].x = index * reels[index].width;
-    reels[index].y = 0;
-    reels[index].element = document.createElement("canvas");
-    reels[index].element.style.position = "absolute";
-    reels[index].element.style.width = reels[index].width + "px";
-    reels[index].element.style.height = reels[index].height + "px";
-    reels[index].element.style.left = reels[index].x + "px";
-    reels[index].element.style.top = reels[index].y + "px";
-    reels[index].element.style.border = "6px ridge black";
-    reels[index].element.style.backgroundColor = "white";
-    reels[index].element.style.boxSizing = "border-box";
-    reels[index].element.style.display = "flex";
-    reels[index].element.style.alignItems = "center";
-    reels[index].element.style.justifyContent = "center";
-
-    screenContainer.element.appendChild(reels[index].element);
-  },
-}));
 
 const showGameOverMessage = () => {
   let wrapElement = document.createElement("div");
