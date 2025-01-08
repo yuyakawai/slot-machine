@@ -1,18 +1,18 @@
 export const images = [
   {
-    name: "balloon_blue",
+    name: "image_1",
     path: "image/image_1.png",
     element: null,
     isLoaded: false,
   },
   {
-    name: "balloon_green",
+    name: "image_2",
     path: "image/image_2.png",
     element: null,
     isLoaded: false,
   },
   {
-    name: "balloon_green",
+    name: "image_3",
     path: "image/image_3.png",
     element: null,
     isLoaded: false,

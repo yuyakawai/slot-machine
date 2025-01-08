@@ -53,6 +53,13 @@ const loaderContainer = {
   messageElement: null,
 };
 
+const canvas = {
+  element: null,
+  context: null,
+  width: screenContainer.width,
+  height: screenContainer.height,
+};
+
 window.onload = () => {
   init();
 };
@@ -114,6 +121,15 @@ const init = () => {
   screenContainer.element.style.justifyContent = "center";
   mainContainer.element.appendChild(screenContainer.element);
 
+  canvas.element = document.createElement("canvas");
+  screenContainer.element.appendChild(canvas.element);
+
+  canvas.context = canvas.element.getContext("2d");
+  canvas.element.width = canvas.width;
+  canvas.element.height = canvas.height;
+  canvas.context.fillStyle = "lightblue";
+  canvas.context.fillRect(0, 0, canvas.width, canvas.height);
+
   controllerContainer.element = document.createElement("div");
   controllerContainer.element.style.position = "relative";
   controllerContainer.element.style.width = controllerContainer.width + "px";
@@ -137,7 +153,7 @@ const init = () => {
   mainContainer.element.appendChild(loaderContainer.messageElement);
 
   controller.init();
-  reels.forEach((reel) => reel.init());
+  // reels.forEach((reel) => reel.init());
   loadImages();
 
   gameStatus.currentScene = scene.find((e) => e.name === "initImages");
@@ -157,15 +173,9 @@ const scene = [
     },
   },
   {
-    name: "initGame",
-    update: () => {
-      gameStatus.currentScene = scene.find((e) => e.name === "ready");
-    },
-  },
-  {
     name: "ready",
     update: () => {
-      // empty
+      ready();
     },
   },
   {
@@ -200,7 +210,22 @@ const updateImageLoading = () => {
   }
   loaderContainer.progressBarElement.style.display = "none";
   loaderContainer.messageElement.style.display = "none";
-  gameStatus.currentScene = scene.find((e) => e.name === "initGame");
+  gameStatus.currentScene = scene.find((e) => e.name === "ready");
+};
+
+const ready = () => {
+  gameStatus.isGameStart = true;
+  canvas.context.drawImage(
+    images.find((image) => image.name === "image_1").element,
+    0,
+    96,
+    96,
+    288,
+    0,
+    0,
+    96,
+    288
+  );
 };
 
 const controller = {
