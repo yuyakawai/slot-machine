@@ -67,7 +67,7 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
   })),
   shiftY: 0,
   speed: 10,
-  isSpinning: true,
+  isSpinning: false,
 }));
 
 window.onload = () => {
@@ -184,13 +184,37 @@ const scene = [
   {
     name: "ready",
     update: () => {
-      ready();
+      gameStatus.isGameStart = true;
+      if (controller.buttons.find((e) => e.name === "start").isPressed) {
+        reels.map((reel) => (reel.isSpinning = true));
+        gameStatus.currentScene = scene.find((e) => e.name === "gamePlay");
+      }
+      drawReel();
     },
   },
   {
     name: "gamePlay",
     update: () => {
-      // empty
+      reels[0].isSpinning = controller.buttons.find((e) => e.name === "left")
+        .isPressed
+        ? false
+        : true;
+      reels[1].isSpinning = controller.buttons.find((e) => e.name === "center")
+        .isPressed
+        ? false
+        : true;
+      reels[2].isSpinning = controller.buttons.find((e) => e.name === "right")
+        .isPressed
+        ? false
+        : true;
+
+      drawReel();
+    },
+  },
+  {
+    name: "result",
+    update: () => {
+      //empty
     },
   },
   {
@@ -220,11 +244,6 @@ const updateImageLoading = () => {
   loaderContainer.progressBarElement.style.display = "none";
   loaderContainer.messageElement.style.display = "none";
   gameStatus.currentScene = scene.find((e) => e.name === "ready");
-};
-
-const ready = () => {
-  gameStatus.isGameStart = true;
-  drawReel();
 };
 
 const drawReel = () => {
