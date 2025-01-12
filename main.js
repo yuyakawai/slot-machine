@@ -54,21 +54,21 @@ const canvas = {
   height: screenContainer.height,
 };
 
-const reels = Array(3).fill({
-  x: 0,
+const reels = Array.from({ length: 3 }).map((_, index) => ({
+  x: index * 96,
   y: 0,
   width: 96,
   height: 288,
-  cell: {
-    x: 0,
-    y: 0,
-    width: 96,
-    height: 96,
-  },
+  cellWidth: 96,
+  cellHeight: 96,
+  cells: Array.from({ length: 6 }).map((_, index) => ({
+    id: index + 1,
+    y: index * 96,
+  })),
   shiftY: 0,
-  speed: 1,
-  isSpinning: false,
-});
+  speed: 10,
+  isSpinning: true,
+}));
 
 window.onload = () => {
   init();
@@ -224,37 +224,32 @@ const updateImageLoading = () => {
 
 const ready = () => {
   gameStatus.isGameStart = true;
+  drawReel();
+};
 
-  reels.forEach((reel, index) => {
-    reel.x = index * reel.width;
-    reel.y = 0;
-    reel.cell.x = index * reel.cell.width;
-    reel.cell.y = reel.cell.height;
+const drawReel = () => {
+  reels.map((reel) =>
+    reel.cells.map((cell) => {
+      if (reel.isSpinning) {
+        cell.y -= reel.speed;
+        if (cell.y < -reel.cellHeight) {
+          cell.y = reel.cellHeight * (reel.cells.length - 1);
+        }
+      }
 
-    //reel.shiftY += reel.speed;
-    canvas.context.drawImage(
-      images.find((image) => image.name === "image_1").element,
-      0,
-      reel.shiftY,
-      reel.cell.width,
-      reel.cell.height,
-      reel.x,
-      reel.y,
-      reel.cell.width,
-      reel.cell.height
-    );
-    canvas.context.drawImage(
-      images.find((image) => image.name === "image_2").element,
-      0,
-      0,
-      reel.cell.width,
-      reel.cell.height,
-      reel.x,
-      reel.y,
-      reel.cell.width,
-      reel.cell.height
-    );
-  });
+      canvas.context.drawImage(
+        images.find((image) => image.name === "image_" + cell.id).element,
+        0,
+        0,
+        reel.cellWidth,
+        reel.cellHeight,
+        reel.x,
+        cell.y,
+        reel.cellWidth,
+        reel.cellHeight
+      );
+    })
+  );
 };
 
 const controller = {
