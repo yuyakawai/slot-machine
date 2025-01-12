@@ -59,7 +59,13 @@ const reels = Array(3).fill({
   y: 0,
   width: 96,
   height: 288,
-  imageY: 0,
+  cell: {
+    x: 0,
+    y: 0,
+    width: 96,
+    height: 96,
+  },
+  shiftY: 0,
   speed: 1,
   isSpinning: false,
 });
@@ -220,19 +226,33 @@ const ready = () => {
   gameStatus.isGameStart = true;
 
   reels.forEach((reel, index) => {
-    reel.x = index * 96;
+    reel.x = index * reel.width;
     reel.y = 0;
-    reel.imageY += reel.speed;
+    reel.cell.x = index * reel.cell.width;
+    reel.cell.y = reel.cell.height;
+
+    //reel.shiftY += reel.speed;
     canvas.context.drawImage(
       images.find((image) => image.name === "image_1").element,
       0,
-      reel.imageY,
-      96,
-      288,
+      reel.shiftY,
+      reel.cell.width,
+      reel.cell.height,
       reel.x,
       reel.y,
-      96,
-      288
+      reel.cell.width,
+      reel.cell.height
+    );
+    canvas.context.drawImage(
+      images.find((image) => image.name === "image_2").element,
+      0,
+      0,
+      reel.cell.width,
+      reel.cell.height,
+      reel.x,
+      reel.y,
+      reel.cell.width,
+      reel.cell.height
     );
   });
 };
