@@ -1,4 +1,4 @@
-# spot-the-difference
+# slot-machine
 
 ## 概要
 
