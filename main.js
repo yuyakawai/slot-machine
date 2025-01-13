@@ -304,10 +304,10 @@ const drawReel = () => {
 const controller = {
   pressedButtonNum: 0,
   buttons: [
-    { name: "left", element: null, isPressed: false },
-    { name: "center", element: null, isPressed: false },
-    { name: "right", element: null, isPressed: false },
-    { name: "start", element: null, isPressed: false },
+    { name: "left", element: null, isPressed: false, isLocked: true },
+    { name: "center", element: null, isPressed: false, isLocked: true },
+    { name: "right", element: null, isPressed: false, isLocked: true },
+    { name: "start", element: null, isPressed: false, isLocked: false },
   ],
 
   init: () => {
@@ -332,6 +332,9 @@ const controller = {
 
       const handleButtonDown = (e) => {
         e.preventDefault();
+        if (button.isLocked) {
+          return;
+        }
         controller.changeStatus(e.target.textContent, !button.isPressed);
       };
 
