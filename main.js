@@ -66,9 +66,18 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
     y: index * 96,
   })),
   shiftY: 0,
-  speed: 10,
+  speed: 1,
   isSpinning: false,
 }));
+
+const rate = [
+  { id: 1, coin: 1 },
+  { id: 2, coin: 2 },
+  { id: 3, coin: 3 },
+  { id: 4, coin: 4 },
+  { id: 5, coin: 5 },
+  { id: 6, coin: 6 },
+];
 
 window.onload = () => {
   init();
@@ -187,6 +196,9 @@ const scene = [
       gameStatus.isGameStart = true;
       if (controller.buttons.find((e) => e.name === "start").isPressed) {
         reels.map((reel) => (reel.isSpinning = true));
+        ["left", "center", "right"].forEach((button) =>
+          controller.changeStatus(button, false)
+        );
         gameStatus.currentScene = scene.find((e) => e.name === "gamePlay");
       }
       drawReel();
@@ -244,7 +256,21 @@ const scene = [
   {
     name: "result",
     update: () => {
-      //empty
+      controller.changeStatus("start", false);
+
+      let result = reels.map((reel) =>
+        reel.cells.find((cell) => cell.y === 96)
+      );
+
+      let isWin = result.every((cell) => cell.id === result[0].id);
+      if (isWin) {
+        gameStatus.coin += rate.find((e) => e.id === result[0].id).coin;
+      }
+      statusMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
+
+      gameStatus.currentScene = scene.find((e) =>
+        gameStatus.coin <= 0 ? e.name === "gameOver" : e.name === "ready"
+      );
     },
   },
   {
@@ -304,10 +330,10 @@ const drawReel = () => {
 const controller = {
   pressedButtonNum: 0,
   buttons: [
-    { name: "left", element: null, isPressed: false, isLocked: true },
-    { name: "center", element: null, isPressed: false, isLocked: true },
-    { name: "right", element: null, isPressed: false, isLocked: true },
-    { name: "start", element: null, isPressed: false, isLocked: false },
+    { name: "left", element: null, isPressed: true },
+    { name: "center", element: null, isPressed: true },
+    { name: "right", element: null, isPressed: true },
+    { name: "start", element: null, isPressed: false },
   ],
 
   init: () => {
@@ -332,7 +358,7 @@ const controller = {
 
       const handleButtonDown = (e) => {
         e.preventDefault();
-        if (button.isLocked) {
+        if (button.isPressed) {
           return;
         }
         controller.changeStatus(e.target.textContent, !button.isPressed);
