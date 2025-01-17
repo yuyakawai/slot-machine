@@ -66,7 +66,7 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
     y: index * 96,
   })),
   shiftY: 0,
-  speed: 10,
+  speed: 16,
   isSpinning: false,
 }));
 
@@ -268,9 +268,12 @@ const scene = [
       }
       statusMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
 
+      drawReel();
       gameStatus.currentScene = scene.find((e) =>
         gameStatus.coin <= 0 ? e.name === "gameOver" : e.name === "ready"
       );
+
+      console.log(reels);
     },
   },
   {
