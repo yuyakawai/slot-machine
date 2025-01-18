@@ -220,35 +220,29 @@ const scene = [
 
       if (controller.buttons.find((e) => e.name === "left").isPressed) {
         reels[0].isSpinning = false;
-        reels.map((reel) =>
-          reel.cells.map((cell) => {
-            if (Math.abs(cell.y) % reel.cellHeight !== 0) {
-              cell.y -= Math.abs(cell.y) % reel.cellHeight;
-            }
-          })
-        );
+        reels[0].cells.map((cell) => {
+          if (Math.abs(cell.y) % 96 !== 0) {
+            cell.y--;
+          }
+        });
       }
 
       if (controller.buttons.find((e) => e.name === "center").isPressed) {
         reels[1].isSpinning = false;
-        reels.map((reel) =>
-          reel.cells.map((cell) => {
-            if (Math.abs(cell.y) % reel.cellHeight !== 0) {
-              cell.y -= Math.abs(cell.y) % reel.cellHeight;
-            }
-          })
-        );
+        reels[1].cells.map((cell) => {
+          if (Math.abs(cell.y) % 96 !== 0) {
+            cell.y--;
+          }
+        });
       }
 
       if (controller.buttons.find((e) => e.name === "right").isPressed) {
         reels[2].isSpinning = false;
-        reels.map((reel) =>
-          reel.cells.map((cell) => {
-            if (Math.abs(cell.y) % reel.cellHeight !== 0) {
-              cell.y -= Math.abs(cell.y) % reel.cellHeight;
-            }
-          })
-        );
+        reels[2].cells.map((cell) => {
+          if (Math.abs(cell.y) % 96 !== 0) {
+            cell.y--;
+          }
+        });
       }
 
       drawReel();
@@ -256,7 +250,7 @@ const scene = [
       if (reels.every((reel) => reel.isSpinning === false)) {
         if (
           reels.every((reel) =>
-            reel.cells.every((cell) => cell.y % reel.cellHeight === 0)
+            reel.cells.every((cell) => Math.abs(cell.y) % reel.cellHeight === 0)
           )
         ) {
           gameStatus.currentScene = scene.find((e) => e.name === "result");
