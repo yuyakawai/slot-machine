@@ -66,7 +66,7 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
     y: index * 96,
   })),
   shiftY: 0,
-  speed: 12,
+  speed: 1,
   isSpinning: false,
 }));
 
@@ -187,7 +187,19 @@ const scene = [
   {
     name: "initImages",
     update: () => {
-      updateImageLoading();
+      if (images.some((image) => image.isLoaded === false)) {
+        return;
+      }
+      loaderContainer.progressBarElement.style.display = "none";
+      loaderContainer.messageElement.style.display = "none";
+      gameStatus.currentScene = scene.find((e) => e.name === "resetGame");
+    },
+  },
+  {
+    name: "resetGame",
+    update: () => {
+      resetGame();
+      gameStatus.currentScene = scene.find((e) => e.name === "ready");
     },
   },
   {
@@ -248,6 +260,7 @@ const scene = [
       drawReel();
 
       if (reels.every((reel) => reel.isSpinning === false)) {
+        console.log(reels);
         if (
           reels.every((reel) =>
             reel.cells.every((cell) => Math.abs(cell.y) % reel.cellHeight === 0)
@@ -273,21 +286,16 @@ const scene = [
       }
       statusMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
 
+      //gameStatus.coin--;
       drawReel();
       gameStatus.currentScene = scene.find((e) =>
         gameStatus.coin <= 0 ? e.name === "gameOver" : e.name === "ready"
       );
-
-      console.log(reels);
     },
   },
   {
     name: "gameOver",
-    update: () => {
-      showGameOverMessage();
-      gameStatus.isGameStart = false;
-      gameStatus.currentScene = scene.find((e) => e.name === "ready");
-    },
+    update: () => {},
   },
 ];
 
@@ -299,15 +307,6 @@ const loadImages = () => {
       image.isLoaded = true;
     };
   });
-};
-
-const updateImageLoading = () => {
-  if (images.some((image) => image.isLoaded === false)) {
-    return;
-  }
-  loaderContainer.progressBarElement.style.display = "none";
-  loaderContainer.messageElement.style.display = "none";
-  gameStatus.currentScene = scene.find((e) => e.name === "ready");
 };
 
 const drawReel = () => {
@@ -399,60 +398,24 @@ const controller = {
   },
 };
 
-const showGameOverMessage = () => {
-  let wrapElement = document.createElement("div");
-  wrapElement.style.position = "relative";
-  wrapElement.style.zIndex = "1";
-  wrapElement.style.width = screenContainer.width + "px";
-  wrapElement.style.height = screenContainer.height * 0.4 + "px";
-  wrapElement.style.display = "flex";
-  wrapElement.style.flexDirection = "column";
-  wrapElement.style.alignItems = "center";
-  wrapElement.style.justifyContent = "center";
+const resetGame = () => {
+  const shuffleArray = (array) => {
+    const cloneArray = [...array];
 
-  let messageElement = document.createElement("div");
-  messageElement.style.position = "relative";
-  messageElement.style.zIndex = "1";
-  messageElement.style.width = screenContainer.width * 0.85 + "px";
-  messageElement.style.height = screenContainer.height * 0.15 + "px";
-  messageElement.style.display = "flex";
-  messageElement.style.alignItems = "center";
-  messageElement.style.justifyContent = "center";
-  messageElement.style.backgroundColor = "#f5deb3";
-  messageElement.style.borderRadius = "15px";
-  messageElement.style.color = "red";
-  messageElement.style.fontSize = "34px";
-  messageElement.textContent = "Game Over";
-  wrapElement.appendChild(messageElement);
-
-  let retryButtonElement = document.createElement("div");
-  retryButtonElement.style.position = "relative";
-  retryButtonElement.style.zIndex = "1";
-  retryButtonElement.style.width = screenContainer.width * 0.8 + "px";
-  retryButtonElement.style.height = screenContainer.height * 0.1 + "px";
-  retryButtonElement.style.marginTop = "10px";
-  retryButtonElement.style.display = "flex";
-  retryButtonElement.style.alignItems = "center";
-  retryButtonElement.style.justifyContent = "center";
-  retryButtonElement.style.backgroundColor = "#deb887";
-  retryButtonElement.style.color = "black";
-  retryButtonElement.style.fontSize = "28px";
-  retryButtonElement.style.border = "3px solid #b99679";
-  retryButtonElement.style.borderRadius = "50px";
-  retryButtonElement.style.cursor = "pointer";
-  retryButtonElement.textContent = "もう一度遊ぶ";
-  const handleCellTouchEvent = (e) => {
-    e.preventDefault();
-    gameStatus.reset();
-    gameStatus.isGameStart = true;
-    wrapElement.remove();
+    return cloneArray.reduce((_, cur, index) => {
+      let rand = Math.floor(Math.random() * (index + 1));
+      cloneArray[index] = cloneArray[rand];
+      cloneArray[rand] = cur;
+      return cloneArray;
+    });
   };
 
-  if (window.ontouchstart === null) {
-    retryButtonElement.ontouchstart = handleCellTouchEvent;
-  } else {
-    retryButtonElement.onpointerdown = handleCellTouchEvent;
-  }
-  wrapElement.appendChild(retryButtonElement);
-  screenContainer.element.appendChild(wrapElement);
+  reels.forEach((reel) => {
+    const shuffledIds = shuffleArray(reel.cells.map((cell) => cell.id));
+    reel.cells.forEach((cell, index) => {
+      cell.id = shuffledIds[index];
+    });
+  });
+
+  return;
 };
