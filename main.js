@@ -207,12 +207,23 @@ const scene = [
   {
     name: "gamePlay",
     update: () => {
+      reels.map((reel) => {
+        reel.cells.map((cell) => {
+          if (reel.isSpinning) {
+            cell.y -= reel.speed;
+            if (cell.y <= -reel.cellHeight) {
+              cell.y = reel.cellHeight * (reel.cells.length - 1);
+            }
+          }
+        });
+      });
+
       if (controller.buttons.find((e) => e.name === "left").isPressed) {
         reels[0].isSpinning = false;
         reels.map((reel) =>
           reel.cells.map((cell) => {
-            if (cell.y % reel.cellHeight !== 0) {
-              cell.y--;
+            if (Math.abs(cell.y) % reel.cellHeight !== 0) {
+              cell.y -= Math.abs(cell.y) % reel.cellHeight;
             }
           })
         );
@@ -222,8 +233,8 @@ const scene = [
         reels[1].isSpinning = false;
         reels.map((reel) =>
           reel.cells.map((cell) => {
-            if (cell.y % reel.cellHeight !== 0) {
-              cell.y--;
+            if (Math.abs(cell.y) % reel.cellHeight !== 0) {
+              cell.y -= Math.abs(cell.y) % reel.cellHeight;
             }
           })
         );
@@ -233,8 +244,8 @@ const scene = [
         reels[2].isSpinning = false;
         reels.map((reel) =>
           reel.cells.map((cell) => {
-            if (cell.y % reel.cellHeight !== 0) {
-              cell.y--;
+            if (Math.abs(cell.y) % reel.cellHeight !== 0) {
+              cell.y -= Math.abs(cell.y) % reel.cellHeight;
             }
           })
         );
@@ -308,13 +319,6 @@ const updateImageLoading = () => {
 const drawReel = () => {
   reels.map((reel) =>
     reel.cells.map((cell) => {
-      if (reel.isSpinning) {
-        cell.y -= reel.speed;
-        if (cell.y < -reel.cellHeight) {
-          cell.y = reel.cellHeight * (reel.cells.length - 1);
-        }
-      }
-
       canvas.context.drawImage(
         images.find((image) => image.name === "image_" + cell.id).element,
         0,
