@@ -66,7 +66,7 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
     y: index * 96,
   })),
   shiftY: 0,
-  speed: 1,
+  speed: 16,
   isSpinning: false,
 }));
 
@@ -223,8 +223,8 @@ const scene = [
         reel.cells.map((cell) => {
           if (reel.isSpinning) {
             cell.y -= reel.speed;
-            if (cell.y <= -reel.cellHeight) {
-              cell.y = reel.cellHeight * (reel.cells.length - 1);
+            if (cell.y <= 0) {
+              cell.y = reel.cellHeight * reel.cells.length;
             }
           }
         });
@@ -314,14 +314,8 @@ const drawReel = () => {
     reel.cells.map((cell) => {
       canvas.context.drawImage(
         images.find((image) => image.name === "image_" + cell.id).element,
-        0,
-        0,
-        reel.cellWidth,
-        reel.cellHeight,
         reel.x,
-        cell.y,
-        reel.cellWidth,
-        reel.cellHeight
+        cell.y - reel.cellHeight
       );
     })
   );
