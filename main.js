@@ -30,16 +30,22 @@ const controllerContainer = {
   height: mainContainer.height * 0.2,
 };
 
-const messageWrapContainer = {
+const coinMessageWrapContainer = {
   element: null,
   width: mainContainer.width,
   height: mainContainer.height * 0.1,
 };
 
+const coinMessageContainer = {
+  element: null,
+  width: coinMessageWrapContainer.width / 2,
+  height: coinMessageWrapContainer.height * 0.8,
+};
+
 const statusMessageContainer = {
   element: null,
-  width: messageWrapContainer.width / 2,
-  height: messageWrapContainer.height * 0.8,
+  width: mainContainer.width / 2,
+  height: mainContainer.height * 0.8,
 };
 
 const loaderContainer = {
@@ -66,7 +72,7 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
     y: index * 96,
   })),
   shiftY: 0,
-  speed: 16,
+  speed: 1,
   isSpinning: false,
 }));
 
@@ -103,22 +109,38 @@ const init = () => {
   mainContainer.element.style.userSelect = "none";
   mainContainer.element.style.webkitUserSelect = "none";
 
-  messageWrapContainer.element = document.createElement("div");
-  messageWrapContainer.element.style.position = "relative";
-  messageWrapContainer.element.style.width = messageWrapContainer.width + "px";
-  messageWrapContainer.element.style.height =
-    messageWrapContainer.height + "px";
-  messageWrapContainer.element.style.display = "flex";
-  messageWrapContainer.element.style.alignItems = "center";
-  messageWrapContainer.element.style.justifyContent = "center";
-  mainContainer.element.appendChild(messageWrapContainer.element);
+  coinMessageWrapContainer.element = document.createElement("div");
+  coinMessageWrapContainer.element.style.position = "relative";
+  coinMessageWrapContainer.element.style.width =
+    coinMessageWrapContainer.width + "px";
+  coinMessageWrapContainer.element.style.height =
+    coinMessageWrapContainer.height + "px";
+  coinMessageWrapContainer.element.style.display = "flex";
+  coinMessageWrapContainer.element.style.alignItems = "center";
+  coinMessageWrapContainer.element.style.justifyContent = "center";
+  mainContainer.element.appendChild(coinMessageWrapContainer.element);
+
+  coinMessageContainer.element = document.createElement("div");
+  coinMessageContainer.element.style.position = "relative";
+  coinMessageContainer.element.style.display = "flex";
+  coinMessageContainer.element.style.alignItems = "center";
+  coinMessageContainer.element.style.justifyContent = "center";
+  coinMessageContainer.element.style.backgroundColor = "#deb887";
+  coinMessageContainer.element.style.width = coinMessageContainer.width + "px";
+  coinMessageContainer.element.style.height =
+    coinMessageContainer.height + "px";
+  coinMessageContainer.element.style.margin = "3px";
+  coinMessageContainer.element.style.borderRadius = "10px";
+  coinMessageContainer.element.style.fontSize = "20px";
+  coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
+  coinMessageWrapContainer.element.appendChild(coinMessageContainer.element);
 
   statusMessageContainer.element = document.createElement("div");
   statusMessageContainer.element.style.position = "relative";
   statusMessageContainer.element.style.display = "flex";
   statusMessageContainer.element.style.alignItems = "center";
   statusMessageContainer.element.style.justifyContent = "center";
-  statusMessageContainer.element.style.backgroundColor = "#deb887";
+  statusMessageContainer.element.style.backgroundColor = "lightcyan";
   statusMessageContainer.element.style.width =
     statusMessageContainer.width + "px";
   statusMessageContainer.element.style.height =
@@ -126,8 +148,8 @@ const init = () => {
   statusMessageContainer.element.style.margin = "3px";
   statusMessageContainer.element.style.borderRadius = "10px";
   statusMessageContainer.element.style.fontSize = "20px";
-  statusMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
-  messageWrapContainer.element.appendChild(statusMessageContainer.element);
+  statusMessageContainer.element.textContent = "test";
+  coinMessageWrapContainer.element.appendChild(statusMessageContainer.element);
 
   screenContainer.element = document.createElement("div");
   screenContainer.element.style.position = "relative";
@@ -284,7 +306,7 @@ const scene = [
       if (isWin) {
         gameStatus.coin += rate.find((e) => e.id === result[0].id).coin;
       }
-      statusMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
+      coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
 
       //gameStatus.coin--;
       drawReel();
