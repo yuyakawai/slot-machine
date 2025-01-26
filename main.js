@@ -216,6 +216,8 @@ const scene = [
         ["left", "center", "right"].forEach((button) =>
           controller.changeStatus(button, false)
         );
+        gameStatus.coin -= 5;
+        coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
         gameStatus.currentScene = scene.find((e) => e.name === "gamePlay");
       }
       drawReel();
@@ -226,6 +228,7 @@ const scene = [
     update: () => {
       statusMessageContainer.element.textContent =
         "止めるボタンを押してください";
+
       reels.map((reel) => {
         reel.cells.map((cell) => {
           if (reel.isSpinning) {
@@ -299,7 +302,6 @@ const scene = [
       }
       coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
 
-      //gameStatus.coin--;
       drawReel();
       gameStatus.currentScene = scene.find((e) =>
         gameStatus.coin <= 0 ? e.name === "gameOver" : e.name === "ready"
@@ -423,6 +425,4 @@ const resetGame = () => {
       cell.id = shuffledIds[index];
     });
   });
-
-  return;
 };
