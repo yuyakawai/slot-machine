@@ -44,8 +44,8 @@ const coinMessageContainer = {
 
 const statusMessageContainer = {
   element: null,
-  width: mainContainer.width / 2,
-  height: mainContainer.height * 0.8,
+  width: mainContainer.width * 0.9,
+  height: mainContainer.height * 0.05,
 };
 
 const loaderContainer = {
@@ -135,22 +135,6 @@ const init = () => {
   coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
   coinMessageWrapContainer.element.appendChild(coinMessageContainer.element);
 
-  statusMessageContainer.element = document.createElement("div");
-  statusMessageContainer.element.style.position = "relative";
-  statusMessageContainer.element.style.display = "flex";
-  statusMessageContainer.element.style.alignItems = "center";
-  statusMessageContainer.element.style.justifyContent = "center";
-  statusMessageContainer.element.style.backgroundColor = "lightcyan";
-  statusMessageContainer.element.style.width =
-    statusMessageContainer.width + "px";
-  statusMessageContainer.element.style.height =
-    statusMessageContainer.height + "px";
-  statusMessageContainer.element.style.margin = "3px";
-  statusMessageContainer.element.style.borderRadius = "10px";
-  statusMessageContainer.element.style.fontSize = "20px";
-  statusMessageContainer.element.textContent = "test";
-  coinMessageWrapContainer.element.appendChild(statusMessageContainer.element);
-
   screenContainer.element = document.createElement("div");
   screenContainer.element.style.position = "relative";
   screenContainer.element.style.backgroundColor = "red";
@@ -170,6 +154,22 @@ const init = () => {
   canvas.element.height = canvas.height;
   canvas.context.fillStyle = "lightblue";
   canvas.context.fillRect(0, 0, canvas.width, canvas.height);
+
+  statusMessageContainer.element = document.createElement("div");
+  statusMessageContainer.element.style.position = "relative";
+  statusMessageContainer.element.style.display = "flex";
+  statusMessageContainer.element.style.alignItems = "center";
+  statusMessageContainer.element.style.justifyContent = "center";
+  statusMessageContainer.element.style.backgroundColor = "#deb887";
+  statusMessageContainer.element.style.width =
+    statusMessageContainer.width + "px";
+  statusMessageContainer.element.style.height =
+    statusMessageContainer.height + "px";
+  statusMessageContainer.element.style.margin = "3px";
+  statusMessageContainer.element.style.borderRadius = "10px";
+  statusMessageContainer.element.style.fontSize = "16px";
+  statusMessageContainer.element.textContent = "スタートボタンを押してください";
+  mainContainer.element.appendChild(statusMessageContainer.element);
 
   controllerContainer.element = document.createElement("div");
   controllerContainer.element.style.position = "relative";
@@ -241,6 +241,8 @@ const scene = [
   {
     name: "gamePlay",
     update: () => {
+      statusMessageContainer.element.textContent =
+        "止めるボタンを押してください";
       reels.map((reel) => {
         reel.cells.map((cell) => {
           if (reel.isSpinning) {
@@ -305,6 +307,12 @@ const scene = [
       let isWin = result.every((cell) => cell.id === result[0].id);
       if (isWin) {
         gameStatus.coin += rate.find((e) => e.id === result[0].id).coin;
+        statusMessageContainer.element.textContent =
+          "当たり！ " +
+          rate.find((e) => e.id === result[0].id).coin +
+          "コイン獲得！";
+      } else {
+        statusMessageContainer.element.textContent = "はずれ！";
       }
       coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
 
