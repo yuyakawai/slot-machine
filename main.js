@@ -318,7 +318,7 @@ const scene = [
   {
     name: "gameOver",
     update: () => {
-      statusMessageContainer.element.textContent = "ゲームオーバー";
+      statusMessageContainer.element.textContent = "コインがなくなりました";
       mainContainer.element.style.backgroundColor = "tomato";
     },
   },
