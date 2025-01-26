@@ -1,14 +1,14 @@
 import { images } from "./images.js";
 
 const gameParameters = {
-  initialCoin: 60,
+  initialCoin: 20,
+  colorChangeCoin: 100,
 };
 
 const gameStatus = {
   currentScene: null,
   isGameStart: false,
   isGameClear: false,
-  isGameOver: false,
   coin: gameParameters.initialCoin,
 };
 
@@ -71,12 +71,12 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
 }));
 
 const rate = [
-  { id: 1, coin: 1 },
-  { id: 2, coin: 2 },
-  { id: 3, coin: 3 },
-  { id: 4, coin: 4 },
-  { id: 5, coin: 5 },
-  { id: 6, coin: 6 },
+  { id: 1, coin: 10 },
+  { id: 2, coin: 20 },
+  { id: 3, coin: 30 },
+  { id: 4, coin: 40 },
+  { id: 5, coin: 50 },
+  { id: 6, coin: 60 },
 ];
 
 window.onload = () => {
@@ -306,11 +306,19 @@ const scene = [
       gameStatus.currentScene = scene.find((e) =>
         gameStatus.coin <= 0 ? e.name === "gameOver" : e.name === "ready"
       );
+
+      mainContainer.element.style.backgroundColor =
+        gameStatus.coin >= gameParameters.colorChangeCoin
+          ? "palegreen"
+          : "#f5deb3";
     },
   },
   {
     name: "gameOver",
-    update: () => {},
+    update: () => {
+      statusMessageContainer.element.textContent = "ゲームオーバー";
+      mainContainer.element.style.backgroundColor = "tomato";
+    },
   },
 ];
 
