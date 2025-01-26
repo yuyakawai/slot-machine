@@ -30,16 +30,10 @@ const controllerContainer = {
   height: mainContainer.height * 0.2,
 };
 
-const coinMessageWrapContainer = {
-  element: null,
-  width: mainContainer.width,
-  height: mainContainer.height * 0.1,
-};
-
 const coinMessageContainer = {
   element: null,
-  width: coinMessageWrapContainer.width / 2,
-  height: coinMessageWrapContainer.height * 0.8,
+  width: mainContainer.width * 0.5,
+  height: mainContainer.height * 0.075,
 };
 
 const statusMessageContainer = {
@@ -109,17 +103,6 @@ const init = () => {
   mainContainer.element.style.userSelect = "none";
   mainContainer.element.style.webkitUserSelect = "none";
 
-  coinMessageWrapContainer.element = document.createElement("div");
-  coinMessageWrapContainer.element.style.position = "relative";
-  coinMessageWrapContainer.element.style.width =
-    coinMessageWrapContainer.width + "px";
-  coinMessageWrapContainer.element.style.height =
-    coinMessageWrapContainer.height + "px";
-  coinMessageWrapContainer.element.style.display = "flex";
-  coinMessageWrapContainer.element.style.alignItems = "center";
-  coinMessageWrapContainer.element.style.justifyContent = "center";
-  mainContainer.element.appendChild(coinMessageWrapContainer.element);
-
   coinMessageContainer.element = document.createElement("div");
   coinMessageContainer.element.style.position = "relative";
   coinMessageContainer.element.style.display = "flex";
@@ -133,7 +116,7 @@ const init = () => {
   coinMessageContainer.element.style.borderRadius = "10px";
   coinMessageContainer.element.style.fontSize = "20px";
   coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
-  coinMessageWrapContainer.element.appendChild(coinMessageContainer.element);
+  mainContainer.element.appendChild(coinMessageContainer.element);
 
   screenContainer.element = document.createElement("div");
   screenContainer.element.style.position = "relative";
