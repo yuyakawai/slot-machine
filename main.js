@@ -151,7 +151,7 @@ const init = () => {
   statusMessageContainer.element.style.margin = "3px";
   statusMessageContainer.element.style.borderRadius = "10px";
   statusMessageContainer.element.style.fontSize = "16px";
-  statusMessageContainer.element.textContent = "スタートボタンを押してください";
+  statusMessageContainer.element.textContent = "START ボタンを押してください";
   mainContainer.element.appendChild(statusMessageContainer.element);
 
   controllerContainer.element = document.createElement("div");
@@ -211,7 +211,7 @@ const scene = [
     name: "ready",
     update: () => {
       gameStatus.isGameStart = true;
-      if (controller.buttons.find((e) => e.name === "start").isPressed) {
+      if (controller.buttons.find((e) => e.name === "START").isPressed) {
         reels.map((reel) => (reel.isSpinning = true));
         ["left", "center", "right"].forEach((button) =>
           controller.changeStatus(button, false)
@@ -286,7 +286,7 @@ const scene = [
   {
     name: "result",
     update: () => {
-      controller.changeStatus("start", false);
+      controller.changeStatus("START", false);
 
       let result = reels.map((reel) =>
         reel.cells.find((cell) => cell.y === 96)
@@ -352,7 +352,7 @@ const controller = {
     { name: "left", element: null, isPressed: true },
     { name: "center", element: null, isPressed: true },
     { name: "right", element: null, isPressed: true },
-    { name: "start", element: null, isPressed: false },
+    { name: "START", element: null, isPressed: false },
   ],
 
   init: () => {
@@ -362,7 +362,7 @@ const controller = {
       buttonElement.style.width = controllerContainer.width * 0.3 + "px";
       buttonElement.style.height = controllerContainer.height * 0.4 + "px";
       buttonElement.style.margin = "5px";
-      buttonElement.style.fontSize = controllerContainer.width * 0.08 + "px";
+      buttonElement.style.fontSize = controllerContainer.width * 0.07 + "px";
       buttonElement.style.backgroundColor = "orange";
       buttonElement.style.borderBottom = "5px solid #b84c00";
       buttonElement.style.borderRadius = "7px";
