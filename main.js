@@ -66,7 +66,7 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
     y: index * 96,
   })),
   shiftY: 0,
-  speed: 12,
+  speed: 0,
   isSpinning: false,
 }));
 
@@ -217,6 +217,8 @@ const scene = [
           controller.changeStatus(button, false)
         );
         gameStatus.coin -= 5;
+        let spped = Math.trunc(Math.random() * 10) + 10;
+        reels.map((reel) => (reel.speed = spped));
         coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
         gameStatus.currentScene = scene.find((e) => e.name === "gamePlay");
       }
