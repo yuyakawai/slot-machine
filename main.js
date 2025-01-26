@@ -242,7 +242,7 @@ const scene = [
         });
       });
 
-      if (controller.buttons.find((e) => e.name === "left").isPressed) {
+      if (controller.buttons.find((e) => e.id === "left").isPressed) {
         reels[0].isSpinning = false;
         reels[0].cells.map((cell) => {
           if (Math.abs(cell.y) % 96 !== 0) {
@@ -251,7 +251,7 @@ const scene = [
         });
       }
 
-      if (controller.buttons.find((e) => e.name === "center").isPressed) {
+      if (controller.buttons.find((e) => e.id === "center").isPressed) {
         reels[1].isSpinning = false;
         reels[1].cells.map((cell) => {
           if (Math.abs(cell.y) % 96 !== 0) {
@@ -260,7 +260,7 @@ const scene = [
         });
       }
 
-      if (controller.buttons.find((e) => e.name === "right").isPressed) {
+      if (controller.buttons.find((e) => e.id === "right").isPressed) {
         reels[2].isSpinning = false;
         reels[2].cells.map((cell) => {
           if (Math.abs(cell.y) % 96 !== 0) {
@@ -272,7 +272,6 @@ const scene = [
       drawReel();
 
       if (reels.every((reel) => reel.isSpinning === false)) {
-        console.log(reels);
         if (
           reels.every((reel) =>
             reel.cells.every((cell) => Math.abs(cell.y) % reel.cellHeight === 0)
@@ -286,7 +285,7 @@ const scene = [
   {
     name: "result",
     update: () => {
-      controller.changeStatus("START", false);
+      controller.changeStatus("start", false);
 
       let result = reels.map((reel) =>
         reel.cells.find((cell) => cell.y === 96)
@@ -349,10 +348,10 @@ const drawReel = () => {
 const controller = {
   pressedButtonNum: 0,
   buttons: [
-    { name: "left", element: null, isPressed: true },
-    { name: "center", element: null, isPressed: true },
-    { name: "right", element: null, isPressed: true },
-    { name: "START", element: null, isPressed: false },
+    { id: "left", name: "", element: null, isPressed: true },
+    { id: "center", name: "", element: null, isPressed: true },
+    { id: "right", name: "", element: null, isPressed: true },
+    { id: "start", name: "START", element: null, isPressed: false },
   ],
 
   init: () => {
@@ -380,7 +379,7 @@ const controller = {
         if (button.isPressed) {
           return;
         }
-        controller.changeStatus(e.target.textContent, !button.isPressed);
+        controller.changeStatus(button.id, !button.isPressed);
       };
 
       const handleButtonUp = (e) => {
@@ -399,8 +398,8 @@ const controller = {
     controller.update();
   },
 
-  changeStatus: (buttonText, isPressed) => {
-    controller.buttons.find((e) => e.name === buttonText).isPressed = isPressed;
+  changeStatus: (id, isPressed) => {
+    controller.buttons.find((e) => e.id === id).isPressed = isPressed;
     controller.update();
   },
 
