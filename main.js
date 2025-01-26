@@ -66,7 +66,7 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
     y: index * 96,
   })),
   shiftY: 0,
-  speed: 1,
+  speed: 12,
   isSpinning: false,
 }));
 
@@ -234,7 +234,7 @@ const scene = [
           if (reel.isSpinning) {
             cell.y -= reel.speed;
             if (cell.y <= 0) {
-              cell.y = reel.cellHeight * reel.cells.length;
+              cell.y = reel.cellHeight * reel.cells.length + cell.y;
             }
           }
         });
@@ -244,7 +244,7 @@ const scene = [
         reels[0].isSpinning = false;
         reels[0].cells.map((cell) => {
           if (Math.abs(cell.y) % 96 !== 0) {
-            cell.y -= Math.abs(cell.y) % 96;
+            cell.y--;
           }
         });
       }
@@ -253,7 +253,7 @@ const scene = [
         reels[1].isSpinning = false;
         reels[1].cells.map((cell) => {
           if (Math.abs(cell.y) % 96 !== 0) {
-            cell.y -= Math.abs(cell.y) % 96;
+            cell.y--;
           }
         });
       }
@@ -262,7 +262,7 @@ const scene = [
         reels[2].isSpinning = false;
         reels[2].cells.map((cell) => {
           if (Math.abs(cell.y) % 96 !== 0) {
-            cell.y -= Math.abs(cell.y) % 96;
+            cell.y--;
           }
         });
       }
