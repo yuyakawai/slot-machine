@@ -358,13 +358,17 @@ const controller = {
     controller.buttons.forEach((button) => {
       let buttonElement = document.createElement("div");
       buttonElement.style.position = "relative";
-      buttonElement.style.width = controllerContainer.width * 0.3 + "px";
+      buttonElement.style.width =
+        button.id === "start"
+          ? controllerContainer.width * 0.3 + "px"
+          : controllerContainer.width * 0.2 + "px";
       buttonElement.style.height = controllerContainer.height * 0.4 + "px";
-      buttonElement.style.margin = "5px";
+      buttonElement.style.margin =
+        button.id === "start" ? "0px" : "5px 17px 5px";
       buttonElement.style.fontSize = controllerContainer.width * 0.07 + "px";
       buttonElement.style.backgroundColor = "orange";
       buttonElement.style.borderBottom = "5px solid #b84c00";
-      buttonElement.style.borderRadius = "7px";
+      buttonElement.style.borderRadius = button.id === "start" ? "7px" : "50%";
       buttonElement.style.boxSizing = "border-box";
       buttonElement.style.cursor = "pointer";
       buttonElement.style.display = "flex";
