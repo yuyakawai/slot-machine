@@ -139,6 +139,33 @@ const init = () => {
   helpButtonContainer.element = document.createElement("div");
   helpButtonContainer.element.classList.add("helpbutton");
   helpButtonContainer.element.textContent = "？";
+  helpButtonContainer.element.onclick = () => {
+    const messageBox = document.createElement("div");
+    messageBox.style.position = "absolute";
+    messageBox.style.top = "0" + "px";
+    messageBox.style.left = "0" + "px";
+    // messageBox.style.transform = "translate(-50%, -50%)";
+    messageBox.style.width = mainContainer.width * 0.8 + "px";
+    messageBox.style.height = mainContainer.height * 0.6 + "px";
+    messageBox.style.padding = "20px";
+    messageBox.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    messageBox.style.color = "white";
+    messageBox.style.borderRadius = "10px";
+    messageBox.style.textAlign = "center";
+    messageBox.style.zIndex = "1";
+    messageBox.textContent =
+      "【ルール説明】\n\n1プレイ5コインでスロットを回します。\n\nリールを止めるボタンを押して揃えましょう。\n\nリールが止まると結果が表示されます。\n\n結果によってコインが増減します。\n\nコインがなくなるとゲームオーバーです。";
+
+    const closeButton = document.createElement("button");
+    closeButton.textContent = "閉じる";
+    closeButton.style.marginTop = "10px";
+    closeButton.onclick = () => {
+      document.body.removeChild(messageBox);
+    };
+
+    messageBox.appendChild(closeButton);
+    document.body.appendChild(messageBox);
+  };
   headerContainer.element.appendChild(helpButtonContainer.element);
 
   screenContainer.element = document.createElement("div");
