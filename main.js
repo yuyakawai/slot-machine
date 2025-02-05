@@ -18,6 +18,10 @@ const mainContainer = {
   height: 480,
 };
 
+const helpButtonContainer = {
+  element: null,
+};
+
 const screenContainer = {
   element: null,
   width: mainContainer.width * 0.9,
@@ -117,6 +121,11 @@ const init = () => {
   coinMessageContainer.element.style.fontSize = "20px";
   coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
   mainContainer.element.appendChild(coinMessageContainer.element);
+
+  helpButtonContainer.element = document.createElement("div");
+  helpButtonContainer.element.classList.add("helpbutton");
+  helpButtonContainer.element.textContent = "？";
+  mainContainer.element.appendChild(helpButtonContainer.element);
 
   screenContainer.element = document.createElement("div");
   screenContainer.element.style.position = "relative";
