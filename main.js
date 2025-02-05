@@ -18,6 +18,12 @@ const mainContainer = {
   height: 480,
 };
 
+const headerContainer = {
+  element: null,
+  width: mainContainer.width,
+  height: mainContainer.height * 0.2,
+};
+
 const helpButtonContainer = {
   element: null,
 };
@@ -36,7 +42,7 @@ const controllerContainer = {
 
 const coinMessageContainer = {
   element: null,
-  width: mainContainer.width * 0.5,
+  width: mainContainer.width * 0.7,
   height: mainContainer.height * 0.075,
 };
 
@@ -107,6 +113,14 @@ const init = () => {
   mainContainer.element.style.userSelect = "none";
   mainContainer.element.style.webkitUserSelect = "none";
 
+  headerContainer.element = document.createElement("div");
+  headerContainer.element.style.display = "flex";
+  headerContainer.element.style.justifyContent = "space-evenly";
+  headerContainer.element.style.alignItems = "center";
+  headerContainer.element.style.width = headerContainer.width + "px";
+  headerContainer.element.style.height = headerContainer.height + "px";
+  mainContainer.element.appendChild(headerContainer.element);
+
   coinMessageContainer.element = document.createElement("div");
   coinMessageContainer.element.style.position = "relative";
   coinMessageContainer.element.style.display = "flex";
@@ -120,12 +134,12 @@ const init = () => {
   coinMessageContainer.element.style.borderRadius = "10px";
   coinMessageContainer.element.style.fontSize = "20px";
   coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
-  mainContainer.element.appendChild(coinMessageContainer.element);
+  headerContainer.element.appendChild(coinMessageContainer.element);
 
   helpButtonContainer.element = document.createElement("div");
   helpButtonContainer.element.classList.add("helpbutton");
   helpButtonContainer.element.textContent = "？";
-  mainContainer.element.appendChild(helpButtonContainer.element);
+  headerContainer.element.appendChild(helpButtonContainer.element);
 
   screenContainer.element = document.createElement("div");
   screenContainer.element.style.position = "relative";
