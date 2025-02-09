@@ -162,12 +162,49 @@ const init = () => {
     messageBox.style.textAlign = "center";
     messageBox.style.zIndex = "1";
     messageBox.textContent =
-      "【ルール説明】\n\n1プレイ5コインでスロットを回します。\n\nリールを止めるボタンを押して揃えましょう。\n\nリールが止まると結果が表示されます。\n\n結果によってコインが増減します。\n\nコインがなくなるとゲームオーバーです。";
+      "【ルール説明】\n\n1プレイ5コインでスロットを回せます。\n\nリールを止めるボタンを押して揃えましょう。\n\nコインがなくなるとゲームオーバーです。";
+
+    const imagePaths = [
+      "./image/image_1.png",
+      "./image/image_2.png",
+      "./image/image_3.png",
+      "./image/image_4.png",
+      "./image/image_5.png",
+      "./image/image_6.png",
+    ];
+
+    const messageCanvas = document.createElement("canvas");
+    messageCanvas.style.width = messageBox.getClientRects().width * 0.9 + "px";
+    messageCanvas.style.height =
+      messageBox.getClientRects().height * 0.9 + "px";
+    messageBox.appendChild(messageCanvas);
+
+    console.log(messageBox.getClientRects().width);
+
+    const messageContext = messageCanvas.getContext("2d");
+    messageContext.fillStyle = "blue";
+    messageContext.fillRect(0, 0, 10, 10);
+
+    imagePaths.forEach((path, index) => {
+      const img = new Image();
+      img.src = path;
+      img.onload = () => {
+        const x = (index % 3) * (messageCanvas.width / 3);
+        const y = Math.floor(index / 3) * (messageCanvas.height / 2);
+        messageContext.drawImage(
+          img,
+          x,
+          y,
+          messageCanvas.width / 3,
+          messageCanvas.height / 2
+        );
+      };
+    });
 
     const closeButton = document.createElement("div");
     closeButton.style.fontSize = "18px";
     closeButton.style.marginTop = "10px";
-    closeButton.style.padding = "10px 20px";
+    closeButton.style.padding = "5px 15px";
     closeButton.style.backgroundColor = "orange";
     closeButton.style.color = "white";
     closeButton.style.border = "none";
