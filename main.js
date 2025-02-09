@@ -26,7 +26,7 @@ const headerContainer = {
 
 const helpButtonContainer = {
   element: null,
-  isOpen: false,
+  isShowMessageBox: false,
 };
 
 const screenContainer = {
@@ -141,6 +141,11 @@ const init = () => {
   helpButtonContainer.element.classList.add("helpbutton");
   helpButtonContainer.element.textContent = "？";
   const handleHelpButtonDown = () => {
+    if (helpButtonContainer.isShowMessageBox) {
+      return;
+    }
+    helpButtonContainer.isShowMessageBox = true;
+
     const messageBox = document.createElement("div");
     messageBox.style.position = "absolute";
     messageBox.style.top =
@@ -151,7 +156,7 @@ const init = () => {
     messageBox.style.height = mainContainer.height * 0.8 + "px";
     messageBox.style.padding = "20px";
     messageBox.style.backgroundColor = "black";
-    messageBox.style.opacity = "0.85";
+    messageBox.style.opacity = "0.9";
     messageBox.style.color = "white";
     messageBox.style.borderRadius = "10px";
     messageBox.style.textAlign = "center";
@@ -172,6 +177,7 @@ const init = () => {
 
     const handleButtonDown = (e) => {
       e.preventDefault();
+      helpButtonContainer.isShowMessageBox = false;
       document.body.removeChild(messageBox);
     };
 
