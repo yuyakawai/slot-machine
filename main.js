@@ -243,6 +243,7 @@ const init = () => {
   const leftTriangle = document.createElement("div");
   leftTriangle.style.width = "0";
   leftTriangle.style.height = "0";
+  leftTriangle.style.margin = "1px";
   leftTriangle.style.borderStyle = "solid";
   leftTriangle.style.borderTop = "10px solid transparent";
   leftTriangle.style.borderBottom = "10px solid transparent";
@@ -262,6 +263,7 @@ const init = () => {
   const rightTriangle = document.createElement("div");
   rightTriangle.style.width = "0";
   rightTriangle.style.height = "0";
+  rightTriangle.style.marginLeft = "1px";
   rightTriangle.style.borderStyle = "solid";
   rightTriangle.style.borderTop = "10px solid transparent";
   rightTriangle.style.borderBottom = "10px solid transparent";
