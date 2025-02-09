@@ -21,7 +21,7 @@ const mainContainer = {
 const headerContainer = {
   element: null,
   width: mainContainer.width,
-  height: mainContainer.height * 0.2,
+  height: mainContainer.height * 0.1,
 };
 
 const helpButtonContainer = {
@@ -142,13 +142,15 @@ const init = () => {
   helpButtonContainer.element.onclick = () => {
     const messageBox = document.createElement("div");
     messageBox.style.position = "absolute";
-    messageBox.style.top = "0" + "px";
-    messageBox.style.left = "0" + "px";
-    // messageBox.style.transform = "translate(-50%, -50%)";
+    messageBox.style.top =
+      mainContainer.element.getBoundingClientRect().top + 32 + "px";
+    messageBox.style.left =
+      mainContainer.element.getBoundingClientRect().left + 10 + "px";
     messageBox.style.width = mainContainer.width * 0.8 + "px";
-    messageBox.style.height = mainContainer.height * 0.6 + "px";
+    messageBox.style.height = mainContainer.height * 0.8 + "px";
     messageBox.style.padding = "20px";
-    messageBox.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    messageBox.style.backgroundColor = "black";
+    messageBox.style.opacity = "0.85";
     messageBox.style.color = "white";
     messageBox.style.borderRadius = "10px";
     messageBox.style.textAlign = "center";
@@ -156,9 +158,16 @@ const init = () => {
     messageBox.textContent =
       "【ルール説明】\n\n1プレイ5コインでスロットを回します。\n\nリールを止めるボタンを押して揃えましょう。\n\nリールが止まると結果が表示されます。\n\n結果によってコインが増減します。\n\nコインがなくなるとゲームオーバーです。";
 
-    const closeButton = document.createElement("button");
-    closeButton.textContent = "閉じる";
+    const closeButton = document.createElement("div");
+    closeButton.style.fontSize = "18px";
     closeButton.style.marginTop = "10px";
+    closeButton.style.padding = "10px 20px";
+    closeButton.style.backgroundColor = "orange";
+    closeButton.style.color = "white";
+    closeButton.style.border = "none";
+    closeButton.style.borderRadius = "5px";
+    closeButton.style.cursor = "pointer";
+    closeButton.textContent = "閉じる";
 
     const handleButtonDown = (e) => {
       e.preventDefault();
@@ -235,6 +244,8 @@ const init = () => {
 
   controller.init();
   loadImages();
+
+  console.log(mainContainer.element.getBoundingClientRect().top);
 
   gameStatus.currentScene = scene.find((e) => e.name === "initImages");
   tick();
