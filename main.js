@@ -66,13 +66,14 @@ const canvas = {
   height: screenContainer.height,
 };
 
+const cellWidth = 96;
 const cellHeight = 96;
 
 const reels = Array.from({ length: 3 }).map((_, index) => ({
-  x: index * 96,
+  x: index * cellWidth,
   y: 0,
-  width: 96,
-  height: 288,
+  width: cellWidth,
+  height: cellHeight * 3,
   cells: Array.from({ length: 6 }).map((_, index) => ({
     id: index + 1,
     y: index * cellHeight,
