@@ -162,16 +162,9 @@ const init = () => {
     messageBox.style.textAlign = "center";
     messageBox.style.zIndex = "1";
     messageBox.textContent =
-      "【ルール説明】\n\n1プレイ5コインでスロットを回せます。\n\nリールを止めるボタンを押して揃えましょう。\n\nコインがなくなるとゲームオーバーです。";
+      "【ルール説明】\n\n1回5コインでスロットを回せます。\n\nリールを止めるボタンを押してイラストを揃えましょう。\n\nコインがなくなるとゲームオーバーです。";
 
-    const imagePaths = [
-      "./image/image_1.png",
-      "./image/image_2.png",
-      "./image/image_3.png",
-      "./image/image_4.png",
-      "./image/image_5.png",
-      "./image/image_6.png",
-    ];
+    const imagePaths = ["./image/image_1.png"];
 
     const messageCanvas = document.createElement("canvas");
     messageCanvas.style.width = messageBox.getClientRects().width * 0.9 + "px";
@@ -238,7 +231,7 @@ const init = () => {
 
   screenContainer.element = document.createElement("div");
   screenContainer.element.style.position = "relative";
-  screenContainer.element.style.backgroundColor = "red";
+  //screenContainer.element.style.backgroundColor = "red";
   screenContainer.element.style.width = screenContainer.width + "px";
   screenContainer.element.style.height = screenContainer.height + "px";
   screenContainer.element.style.margin = "3px";
@@ -246,6 +239,16 @@ const init = () => {
   screenContainer.element.style.alignItems = "center";
   screenContainer.element.style.justifyContent = "center";
   mainContainer.element.appendChild(screenContainer.element);
+
+  const leftTriangle = document.createElement("div");
+  leftTriangle.style.width = "0";
+  leftTriangle.style.height = "0";
+  leftTriangle.style.borderStyle = "solid";
+  leftTriangle.style.borderTop = "10px solid transparent";
+  leftTriangle.style.borderBottom = "10px solid transparent";
+  leftTriangle.style.borderLeft = "10px solid red";
+  leftTriangle.style.borderRight = "0";
+  screenContainer.element.appendChild(leftTriangle);
 
   canvas.element = document.createElement("canvas");
   screenContainer.element.appendChild(canvas.element);
@@ -255,6 +258,16 @@ const init = () => {
   canvas.element.height = canvas.height;
   canvas.context.fillStyle = "lightblue";
   canvas.context.fillRect(0, 0, canvas.width, canvas.height);
+
+  const rightTriangle = document.createElement("div");
+  rightTriangle.style.width = "0";
+  rightTriangle.style.height = "0";
+  rightTriangle.style.borderStyle = "solid";
+  rightTriangle.style.borderTop = "10px solid transparent";
+  rightTriangle.style.borderBottom = "10px solid transparent";
+  rightTriangle.style.borderLeft = "0";
+  rightTriangle.style.borderRight = "10px solid red";
+  screenContainer.element.appendChild(rightTriangle);
 
   statusMessageContainer.element = document.createElement("div");
   statusMessageContainer.element.style.position = "relative";
