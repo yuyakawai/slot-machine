@@ -241,34 +241,29 @@ const init = () => {
   mainContainer.element.appendChild(screenContainer.element);
 
   const leftTriangle = document.createElement("div");
-  leftTriangle.style.width = "0";
-  leftTriangle.style.height = "0";
-  leftTriangle.style.margin = "1px";
-  leftTriangle.style.borderStyle = "solid";
-  leftTriangle.style.borderTop = "10px solid transparent";
-  leftTriangle.style.borderBottom = "10px solid transparent";
-  leftTriangle.style.borderLeft = "10px solid red";
   leftTriangle.style.borderRight = "0";
+  leftTriangle.style.height = "20px";
+  leftTriangle.style.marginRight = "1px";
+  leftTriangle.style.aspectRatio = "cos(60deg)";
+  leftTriangle.style.clipPath = "polygon(0 0,100% 50%,0 100%)";
+  leftTriangle.style.background = "linear-gradient(90deg, salmon, red)";
   screenContainer.element.appendChild(leftTriangle);
 
   canvas.element = document.createElement("canvas");
   screenContainer.element.appendChild(canvas.element);
-
   canvas.context = canvas.element.getContext("2d");
   canvas.element.width = canvas.width;
   canvas.element.height = canvas.height;
-  canvas.context.fillStyle = "lightblue";
+  canvas.context.fillStyle = "black";
   canvas.context.fillRect(0, 0, canvas.width, canvas.height);
 
   const rightTriangle = document.createElement("div");
-  rightTriangle.style.width = "0";
-  rightTriangle.style.height = "0";
-  rightTriangle.style.marginLeft = "1px";
-  rightTriangle.style.borderStyle = "solid";
-  rightTriangle.style.borderTop = "10px solid transparent";
-  rightTriangle.style.borderBottom = "10px solid transparent";
   rightTriangle.style.borderLeft = "0";
-  rightTriangle.style.borderRight = "10px solid red";
+  rightTriangle.style.height = "20px";
+  rightTriangle.style.marginLeft = "1px";
+  rightTriangle.style.aspectRatio = "cos(60deg)";
+  rightTriangle.style.clipPath = "polygon(100% 0,0 50%,100% 100%)";
+  rightTriangle.style.background = "linear-gradient(90deg, red, salmon)";
   screenContainer.element.appendChild(rightTriangle);
 
   statusMessageContainer.element = document.createElement("div");
