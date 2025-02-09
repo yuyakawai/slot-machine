@@ -418,7 +418,7 @@ const scene = [
       controller.changeStatus("start", false);
 
       let result = reels.map((reel) =>
-        reel.cells.find((cell) => cell.y === 96)
+        reel.cells.find((cell) => cell.y === 96 * 2)
       );
 
       let isWin = result.every((cell) => cell.id === result[0].id);
