@@ -2,6 +2,7 @@ import { images } from "./images.js";
 
 const gameParameters = {
   initialCoin: 20,
+  onePlayCoin: 5,
   colorChangeCoin: 100,
 };
 
@@ -346,7 +347,7 @@ const scene = [
         ["left", "center", "right"].forEach((button) =>
           controller.changeStatus(button, false)
         );
-        gameStatus.coin -= 5;
+        gameStatus.coin -= gameParameters.onePlayCoin;
         let spped = Math.trunc(Math.random() * 10) + 10;
         reels.map((reel) => (reel.speed = spped));
         coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
