@@ -159,9 +159,16 @@ const init = () => {
     const closeButton = document.createElement("button");
     closeButton.textContent = "閉じる";
     closeButton.style.marginTop = "10px";
-    closeButton.onclick = () => {
+
+    const handleButtonDown = (e) => {
+      e.preventDefault();
       document.body.removeChild(messageBox);
     };
+
+    closeButton.ontouchstart =
+      window.ontouchstart === null
+        ? (closeButton.ontouchstart = handleButtonDown)
+        : (closeButton.onpointerdown = handleButtonDown);
 
     messageBox.appendChild(closeButton);
     document.body.appendChild(messageBox);
