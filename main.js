@@ -65,16 +65,16 @@ const canvas = {
   height: screenContainer.height,
 };
 
+const cellHeight = 96;
+
 const reels = Array.from({ length: 3 }).map((_, index) => ({
   x: index * 96,
   y: 0,
   width: 96,
   height: 288,
-  cellWidth: 96,
-  cellHeight: 96,
   cells: Array.from({ length: 6 }).map((_, index) => ({
     id: index + 1,
-    y: index * 96,
+    y: index * cellHeight,
   })),
   shiftY: 0,
   speed: 0,
@@ -366,7 +366,7 @@ const scene = [
           if (reel.isSpinning) {
             cell.y -= reel.speed;
             if (cell.y <= 0) {
-              cell.y = reel.cellHeight * reel.cells.length + cell.y;
+              cell.y = cellHeight * reel.cells.length + cell.y;
             }
           }
         });
@@ -375,7 +375,7 @@ const scene = [
       if (controller.buttons.find((e) => e.id === "left").isPressed) {
         reels[0].isSpinning = false;
         reels[0].cells.map((cell) => {
-          if (Math.abs(cell.y) % 96 !== 0) {
+          if (Math.abs(cell.y) % cellHeight !== 0) {
             cell.y--;
           }
         });
@@ -384,7 +384,7 @@ const scene = [
       if (controller.buttons.find((e) => e.id === "center").isPressed) {
         reels[1].isSpinning = false;
         reels[1].cells.map((cell) => {
-          if (Math.abs(cell.y) % 96 !== 0) {
+          if (Math.abs(cell.y) % cellHeight !== 0) {
             cell.y--;
           }
         });
@@ -393,7 +393,7 @@ const scene = [
       if (controller.buttons.find((e) => e.id === "right").isPressed) {
         reels[2].isSpinning = false;
         reels[2].cells.map((cell) => {
-          if (Math.abs(cell.y) % 96 !== 0) {
+          if (Math.abs(cell.y) % cellHeight !== 0) {
             cell.y--;
           }
         });
@@ -404,7 +404,7 @@ const scene = [
       if (reels.every((reel) => reel.isSpinning === false)) {
         if (
           reels.every((reel) =>
-            reel.cells.every((cell) => Math.abs(cell.y) % reel.cellHeight === 0)
+            reel.cells.every((cell) => Math.abs(cell.y) % cellHeight === 0)
           )
         ) {
           gameStatus.currentScene = scene.find((e) => e.name === "result");
@@ -418,7 +418,7 @@ const scene = [
       controller.changeStatus("start", false);
 
       let result = reels.map((reel) =>
-        reel.cells.find((cell) => cell.y === 96 * 2)
+        reel.cells.find((cell) => cell.y === cellHeight * 2)
       );
 
       let isWin = result.every((cell) => cell.id === result[0].id);
@@ -469,7 +469,7 @@ const drawReel = () => {
       canvas.context.drawImage(
         images.find((image) => image.name === "image_" + cell.id).element,
         reel.x,
-        cell.y - reel.cellHeight
+        cell.y - cellHeight
       );
     })
   );
