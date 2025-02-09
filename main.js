@@ -26,6 +26,7 @@ const headerContainer = {
 
 const helpButtonContainer = {
   element: null,
+  isOpen: false,
 };
 
 const screenContainer = {
@@ -139,7 +140,7 @@ const init = () => {
   helpButtonContainer.element = document.createElement("div");
   helpButtonContainer.element.classList.add("helpbutton");
   helpButtonContainer.element.textContent = "？";
-  helpButtonContainer.element.onclick = () => {
+  const handleHelpButtonDown = () => {
     const messageBox = document.createElement("div");
     messageBox.style.position = "absolute";
     messageBox.style.top =
@@ -174,14 +175,22 @@ const init = () => {
       document.body.removeChild(messageBox);
     };
 
-    closeButton.ontouchstart =
-      window.ontouchstart === null
-        ? (closeButton.ontouchstart = handleButtonDown)
-        : (closeButton.onpointerdown = handleButtonDown);
+    if (window.ontouchstart === null) {
+      closeButton.ontouchstart = handleButtonDown;
+    } else {
+      closeButton.onpointerdown = handleButtonDown;
+    }
 
     messageBox.appendChild(closeButton);
     document.body.appendChild(messageBox);
   };
+
+  if (window.ontouchstart === null) {
+    helpButtonContainer.element.ontouchstart = handleHelpButtonDown;
+  } else {
+    helpButtonContainer.element.onpointerdown = handleHelpButtonDown;
+  }
+
   headerContainer.element.appendChild(helpButtonContainer.element);
 
   screenContainer.element = document.createElement("div");
