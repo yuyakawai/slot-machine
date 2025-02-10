@@ -233,7 +233,7 @@ const init = () => {
 
   screenContainer.element = document.createElement("div");
   screenContainer.element.style.position = "relative";
-  //screenContainer.element.style.backgroundColor = "red";
+  screenContainer.element.style.backgroundColor = "black";
   screenContainer.element.style.width = screenContainer.width + "px";
   screenContainer.element.style.height = screenContainer.height + "px";
   screenContainer.element.style.margin = "3px";
@@ -256,7 +256,7 @@ const init = () => {
   canvas.context = canvas.element.getContext("2d");
   canvas.element.width = canvas.width;
   canvas.element.height = canvas.height;
-  canvas.context.fillStyle = "black";
+  canvas.context.fillStyle = "lightcyan";
   canvas.context.fillRect(0, 0, canvas.width, canvas.height);
 
   const rightTriangle = document.createElement("div");
