@@ -36,8 +36,8 @@ export const images = [
     isLoaded: false,
   },
   {
-    name: "image_rule",
-    path: "image/image_rule.png",
+    name: "image_rate",
+    path: "image/image_rate.png",
     element: null,
     isLoaded: false,
   },

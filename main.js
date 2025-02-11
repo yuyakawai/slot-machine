@@ -151,31 +151,42 @@ const init = () => {
     const messageBox = document.createElement("div");
     messageBox.style.position = "absolute";
     messageBox.style.top =
-      mainContainer.element.getBoundingClientRect().top + 32 + "px";
+      mainContainer.element.getBoundingClientRect().top + 8 + "px";
     messageBox.style.left =
       mainContainer.element.getBoundingClientRect().left + 15 + "px";
     messageBox.style.width = mainContainer.width * 0.85 + "px";
-    messageBox.style.height = mainContainer.height * 0.85 + "px";
+    messageBox.style.height = mainContainer.height * 0.925 + "px";
     messageBox.style.padding = "10px";
     messageBox.style.backgroundColor = "black";
-    messageBox.style.opacity = "0.9";
+    messageBox.style.opacity = "0.95";
     messageBox.style.color = "white";
     messageBox.style.borderRadius = "10px";
     messageBox.style.textAlign = "center";
     messageBox.style.zIndex = "1";
-    messageBox.textContent =
-      "【ルール説明】\n\n1回5コインでスロットを回せます。\n\nコインがなくなるとゲームオーバーです。\n\nコイン" +
+    const message1 = document.createElement("div");
+    message1.textContent = "【ルール説明】";
+    messageBox.appendChild(message1);
+
+    const message2 = document.createElement("div");
+    message2.style.textAlign = "left";
+    message2.textContent =
+      "1回5コインでスロットを回せます。コインがなくなるとゲームオーバー。コイン" +
       gameParameters.colorChangeCoin +
       "枚以上でささやかな変化があります。";
+    messageBox.appendChild(message2);
+
+    const message3 = document.createElement("div");
+    message3.textContent = "【レート表】";
+    messageBox.appendChild(message3);
 
     const messageCanvas = document.createElement("canvas");
-    messageCanvas.style.width = "270px";
-    messageCanvas.style.height = "230px";
+    messageCanvas.width = 270;
+    messageCanvas.height = 260;
     messageBox.appendChild(messageCanvas);
 
     const context = messageCanvas.getContext("2d");
     context.drawImage(
-      images.find((image) => image.name === "image_rule").element,
+      images.find((image) => image.name === "image_rate").element,
       0,
       0,
       messageCanvas.width,
@@ -183,9 +194,9 @@ const init = () => {
     );
 
     const closeButton = document.createElement("div");
-    closeButton.style.fontSize = "18px";
-    closeButton.style.marginTop = "10px";
-    closeButton.style.padding = "5px 15px";
+    closeButton.style.fontSize = "16px";
+    closeButton.style.marginTop = "3px";
+    closeButton.style.padding = "3px";
     closeButton.style.backgroundColor = "orange";
     closeButton.style.color = "white";
     closeButton.style.border = "none";
@@ -294,9 +305,6 @@ const init = () => {
 
   controller.init();
   loadImages();
-
-  console.log(mainContainer.element.getBoundingClientRect().top);
-
   gameStatus.currentScene = scene.find((e) => e.name === "initImages");
   tick();
 };
