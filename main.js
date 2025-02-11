@@ -152,7 +152,6 @@ const init = () => {
     const messageBox = document.createElement("div");
     messageBox.style.fontFamily =
       "'Helvetica Neue',Arial, 'Hiragino Kaku Gothic ProN','Hiragino Sans', Meiryo, sans-serif";
-
     messageBox.style.position = "absolute";
     messageBox.style.top =
       mainContainer.element.getBoundingClientRect().top + 8 + "px";
