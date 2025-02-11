@@ -150,7 +150,7 @@ const init = () => {
     helpButtonContainer.isShowMessageBox = true;
 
     const messageBox = document.createElement("div");
-    messageBox.element.style.fontFamily =
+    messageBox.style.fontFamily =
       "'Helvetica Neue',Arial, 'Hiragino Kaku Gothic ProN','Hiragino Sans', Meiryo, sans-serif";
 
     messageBox.style.position = "absolute";
