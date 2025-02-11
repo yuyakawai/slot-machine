@@ -164,11 +164,13 @@ const init = () => {
     messageBox.style.textAlign = "center";
     messageBox.style.zIndex = "1";
     messageBox.textContent =
-      "【ルール説明】\n\n1回5コインでスロットを回せます。\n\nリールを止めるボタンを押してイラストを揃えましょう。\n\nコインがなくなるとゲームオーバーです。";
+      "【ルール説明】\n\n1回5コインでスロットを回せます。\n\nコインがなくなるとゲームオーバーです。\n\nコイン" +
+      gameParameters.colorChangeCoin +
+      "枚以上でささやかな変化があります。";
 
     const messageCanvas = document.createElement("canvas");
     messageCanvas.style.width = "270px";
-    messageCanvas.style.height = "200px";
+    messageCanvas.style.height = "230px";
     messageBox.appendChild(messageCanvas);
 
     const context = messageCanvas.getContext("2d");
