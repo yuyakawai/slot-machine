@@ -35,4 +35,10 @@ export const images = [
     element: null,
     isLoaded: false,
   },
+  {
+    name: "image_rule",
+    path: "image/image_rule.png",
+    element: null,
+    isLoaded: false,
+  },
 ];

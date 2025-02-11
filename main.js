@@ -153,10 +153,10 @@ const init = () => {
     messageBox.style.top =
       mainContainer.element.getBoundingClientRect().top + 32 + "px";
     messageBox.style.left =
-      mainContainer.element.getBoundingClientRect().left + 10 + "px";
-    messageBox.style.width = mainContainer.width * 0.8 + "px";
-    messageBox.style.height = mainContainer.height * 0.8 + "px";
-    messageBox.style.padding = "20px";
+      mainContainer.element.getBoundingClientRect().left + 15 + "px";
+    messageBox.style.width = mainContainer.width * 0.85 + "px";
+    messageBox.style.height = mainContainer.height * 0.85 + "px";
+    messageBox.style.padding = "10px";
     messageBox.style.backgroundColor = "black";
     messageBox.style.opacity = "0.9";
     messageBox.style.color = "white";
@@ -166,35 +166,19 @@ const init = () => {
     messageBox.textContent =
       "【ルール説明】\n\n1回5コインでスロットを回せます。\n\nリールを止めるボタンを押してイラストを揃えましょう。\n\nコインがなくなるとゲームオーバーです。";
 
-    const imagePaths = ["./image/image_1.png"];
-
     const messageCanvas = document.createElement("canvas");
-    messageCanvas.style.width = messageBox.getClientRects().width * 0.9 + "px";
-    messageCanvas.style.height =
-      messageBox.getClientRects().height * 0.9 + "px";
+    messageCanvas.style.width = "270px";
+    messageCanvas.style.height = "200px";
     messageBox.appendChild(messageCanvas);
 
-    console.log(messageBox.getClientRects().width);
-
-    const messageContext = messageCanvas.getContext("2d");
-    messageContext.fillStyle = "blue";
-    messageContext.fillRect(0, 0, 10, 10);
-
-    imagePaths.forEach((path, index) => {
-      const img = new Image();
-      img.src = path;
-      img.onload = () => {
-        const x = (index % 3) * (messageCanvas.width / 3);
-        const y = Math.floor(index / 3) * (messageCanvas.height / 2);
-        messageContext.drawImage(
-          img,
-          x,
-          y,
-          messageCanvas.width / 3,
-          messageCanvas.height / 2
-        );
-      };
-    });
+    const context = messageCanvas.getContext("2d");
+    context.drawImage(
+      images.find((image) => image.name === "image_rule").element,
+      0,
+      0,
+      messageCanvas.width,
+      messageCanvas.height
+    );
 
     const closeButton = document.createElement("div");
     closeButton.style.fontSize = "18px";
