@@ -3,7 +3,7 @@ import { images } from "./images.js";
 const gameParameters = {
   initialCoin: 20,
   onePlayCoin: 5,
-  colorChangeCoin: 100,
+  colorChangeCoin: 300,
 };
 
 const gameStatus = {
@@ -84,12 +84,12 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
 }));
 
 const rate = [
-  { id: 1, coin: 10 },
+  { id: 1, coin: 35 },
   { id: 2, coin: 20 },
   { id: 3, coin: 30 },
-  { id: 4, coin: 40 },
-  { id: 5, coin: 50 },
-  { id: 6, coin: 60 },
+  { id: 4, coin: 20 },
+  { id: 5, coin: 10 },
+  { id: 6, coin: 5 },
 ];
 
 window.onload = () => {
