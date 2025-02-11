@@ -84,12 +84,12 @@ const reels = Array.from({ length: 3 }).map((_, index) => ({
 }));
 
 const rate = [
-  { id: 1, coin: 35 },
-  { id: 2, coin: 20 },
-  { id: 3, coin: 30 },
-  { id: 4, coin: 20 },
-  { id: 5, coin: 10 },
-  { id: 6, coin: 5 },
+  { id: 1, coin: 70 },
+  { id: 2, coin: 50 },
+  { id: 3, coin: 40 },
+  { id: 4, coin: 30 },
+  { id: 5, coin: 20 },
+  { id: 6, coin: 10 },
 ];
 
 window.onload = () => {
