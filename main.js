@@ -4,6 +4,7 @@ const gameParameters = {
   initialCoin: 20,
   onePlayCoin: 5,
   colorChangeCoin: 300,
+  baseSpeed: 10,
 };
 
 const gameStatus = {
@@ -343,7 +344,9 @@ const scene = [
           controller.changeStatus(button, false)
         );
         gameStatus.coin -= gameParameters.onePlayCoin;
-        let spped = Math.trunc(Math.random() * 10) + 10;
+        let spped =
+          Math.trunc(Math.random() * gameParameters.baseSpeed) +
+          gameParameters.baseSpeed;
         reels.map((reel) => (reel.speed = spped));
         coinMessageContainer.element.textContent = "💰️ × " + gameStatus.coin;
         gameStatus.currentScene = scene.find((e) => e.name === "gamePlay");
